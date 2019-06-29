@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Page</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+        }
+        .title {
+            color: red;
+            font-size: large;
+            font-weight: bold;
+        }
+        button {
+            font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+        }
+    </style>
+    <script src="/static/js/login.js"></script>
+</head>
+<body>
+<form>
+    <div class="title">登录</div>
+    <label for="user">用户名<input name="user" type="text"></label><br />
+    <label for="pwd">密码<input name="pwd" type="password"></label>
+    <div><button onclick="return smt(user,pwd);">→</button></div>
+</form>
+</body>
+</html>
