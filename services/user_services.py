@@ -6,9 +6,7 @@ def is_matched_password(username, password):
     '''
     # TODO
     if username == 'admin' and password == '123':
-        print('true')
         return True
-    print('false')
     return False
 
 

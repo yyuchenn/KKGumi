@@ -25,21 +25,25 @@ def login():
         callback = '/dashboard'  # default callback url
     else:
         callback = callback[0]
-    if session.get('uid') != -1:
+    if session.get('uid') is not None and session.get('uid') != -1:
         return redirect(callback)
     # login process
+    print(callback)
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
         username = request.form.get('user')
         password = request.form.get('pwd')
+        response = {}
         try:
             if is_matched_password(username, password):
                 session['uid'] = get_uid_by_username(username)
-                return redirect(callback)
-            return JSONEncoder().encode({'code': 1})
+                response['code'] = 0  # successful
+            else:
+                response['code'] = 1  # password does not match
         except:
-            return redirect('/login')
+            response['code'] = 2  # fatal error
+        return JSONEncoder().encode(response)
 
 
 @user_bp.route('/logout')
