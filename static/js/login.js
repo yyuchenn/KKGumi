@@ -7,13 +7,14 @@ function smt(user,pwd) {
             fetch("/login",{
                 method: "POST",
                 body: postData
-            }).then(response => response.json()).then(function (j){
+            }).then(function (j){
                 console.log(j);
+                /*
                 try {
                     window.location.href = window.location.search.split("callback=")[1].split("&")[0];
                 }catch(e) {
                      window.location.href = "/";
-                }
+                }*/
 
             });
             return false;
