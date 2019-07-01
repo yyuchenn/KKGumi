@@ -1,2 +1,8 @@
+from flask_sqlalchemy import SQLAlchemy
+
+
 def init_app(app):
-    pass
+    from .user import user_db
+    db = SQLAlchemy(app)
+    user_db(db)
+    return db

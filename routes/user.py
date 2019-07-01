@@ -28,7 +28,6 @@ def login():
     if session.get('uid') is not None and session.get('uid') != -1:
         return redirect(callback)
     # login process
-    print(callback)
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
