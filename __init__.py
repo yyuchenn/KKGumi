@@ -9,13 +9,14 @@ def create_app():
     import models
     my_app = Flask(__name__)
     my_app.config.from_pyfile('conf.py')
-    my_db = models.init_app(my_app)
-    routes.init_app(my_app)
-    services.init_app(my_app)
-    return my_app, my_db
+    models.init_app(my_app)
+    services.init_app(my_app, models.db)
+    routes.init_app(my_app, services)
+    return my_app, models.db
 
 
 app, db = create_app()
+print(type(db))
 db.create_all()
 migrate = Migrate(app, db)
 manager = Manager(app)

@@ -1,4 +1,9 @@
-def init_app(app):
+services = None
+
+
+def init_app(app, my_services):
+    global services
+    services = my_services
     from .home import home_bp
     from .dashboard import dashboard_bp
     from .work import work_bp

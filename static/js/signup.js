@@ -1,4 +1,4 @@
-function login(user, pwd) {
+function signup(user, pwd) {
             user = user.value;
             pwd = pwd.value;
             var postData = new FormData();

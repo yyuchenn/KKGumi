@@ -1,3 +1,6 @@
-from flask import Blueprint
-
-quest_bp = Blueprint('quest_db', __name__)
+def quest_db(db):
+    """
+    :type db: flask_sqlalchemy.SQLAlchemy
+    """
+    class Quest(db.Model):
+        pass
