@@ -58,12 +58,14 @@ def logout():
 def signup():
     # setup callback url
     callback = parse_qs(request.query_string).get(b'callback')
+    print(callback)
     if callback is None:
         callback = '/dashboard'  # default callback url
     else:
         callback = callback[0]
     # setup i_code
-    i_code = callback = parse_qs(request.query_string).get(b'i_code')
+    i_code = parse_qs(request.query_string).get(b'i_code')
+    # callback directly if already login
     if session.get('uid') is not None and session.get('uid') != -1:
         return redirect(callback)
     # signup process
