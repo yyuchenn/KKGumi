@@ -21,22 +21,37 @@ def login_service(username, password):
     return 1
 
 
-def signup_service(username, password, pid = 3):
+def signup_service(username, password, i_code=None):
     '''
+    :param i_code: invitation code
     :param username: username of what the user input
     :param password: password of what the user input
     :return: 0 for success. 1 for bad invitation. 2 for occupied username.
     '''
     from models import db
     from models.user import User
+    from models.privilege import Privilege
     from secrets import token_urlsafe
     check_username_format(username)
     check_password_format(password)
+    # check i_code
+    if i_code is None:
+        pid = 3
+    else:
+        from models.invitation import Invitation
+        invitation = Invitation.query.filter_by(i_code=i_code).first()
+        if invitation is None:
+            return 1
+        pid = invitation.privilege_id
+    # check username availability
     if User.query.filter_by(username=username).first() is not None:
         return 2
+    # create new user
     salt = token_urlsafe(20)
     password_encode = db.session.query(db.func.SHA1(password + salt)).first()[0]
-    new_user = User(username=username, password=password_encode, salt=salt)
+    new_user = User(username=username, password=password_encode, salt=salt, pid=pid, privilege=Privilege.query.get((pid,)))
+    if invitation is not None:
+        db.session.delete(invitation)
     db.session.add(new_user)
     db.session.commit()
     return 0
@@ -54,21 +69,23 @@ def check_password_format(password):
     assert match("^[\da-zA-Z_@*.#!?\- ]+$", password) is not None, "password contains illegal characters."
 
 
-def issue_invitation(uid):
+def issue_invitation(uid, privilege_id):
     from models.user import User
     from models.invitation import Invitation
+    from models.privilege import Privilege
     from models import db
     user = User.query.filter_by(uid=uid).first()
+    print(uid)
     if user.privilege.issue_invitation:
         from secrets import token_urlsafe
         i_code = token_urlsafe(45)
         while Invitation.query.filter_by(i_code=i_code).first() is not None:
             i_code = token_urlsafe(45)
-        new_invitation = Invitation(i_code=i_code, inviter_uid=uid)
+        new_invitation = Invitation(i_code=i_code, inviter_uid=uid, privilege_id=privilege_id, inviter=User.query.get((uid,)), privilege=Privilege.query.get((privilege_id,)))
         db.session.add(new_invitation)
         db.session.commit()
-        return True, i_code
-    return False, 0
+        return 0, i_code
+    return 1, 0
 
 
 def get_uid_by_username(username):

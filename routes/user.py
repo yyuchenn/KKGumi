@@ -34,11 +34,12 @@ def login():
         password = request.form.get('pwd')
         response = {}
         try:
-            if user_services.login_service(username, password) == 0:
+            code = user_services.login_service(username, password)
+            if code == 0:
                 session['uid'] = user_services.get_uid_by_username(username)
                 response['code'] = 0  # successful
             else:
-                response['code'] = 1  # password does not match
+                response['code'] = code  # failed
         except AssertionError as e:
             import sys
             from datetime import datetime
@@ -61,6 +62,8 @@ def signup():
         callback = '/dashboard'  # default callback url
     else:
         callback = callback[0]
+    # setup i_code
+    i_code = callback = parse_qs(request.query_string).get(b'i_code')
     if session.get('uid') is not None and session.get('uid') != -1:
         return redirect(callback)
     # signup process
@@ -70,17 +73,13 @@ def signup():
         username = request.form.get('user')
         password = request.form.get('pwd')
         response = {}
-
-
-        if user_services.signup_service(username, password) == 0:
-            session['uid'] = user_services.get_uid_by_username(username)
-            response['code'] = 0  # successful
-        else:
-            response['code'] = 500  # bad request
-
-
         try:
-            pass
+            code = user_services.signup_service(username, password, i_code)
+            if code == 0:
+                session['uid'] = user_services.get_uid_by_username(username)
+                response['code'] = 0  # successful
+            else:
+                response['code'] = code  # failed
         except AssertionError as e:
             import sys
             from datetime import datetime
