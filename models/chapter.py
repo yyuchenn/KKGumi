@@ -2,6 +2,7 @@ from models import db
 
 
 class Chapter(db.Model):
+    __tablename__ = "chapter"
     cid = db.Column(db.Integer, primary_key=True)
     chapter_name = db.Column(db.String(64))
 

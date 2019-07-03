@@ -34,7 +34,7 @@ def login():
         password = request.form.get('pwd')
         response = {}
         try:
-            if user_services.is_matched_password(username, password):
+            if user_services.login_service(username, password) == 0:
                 session['uid'] = user_services.get_uid_by_username(username)
                 response['code'] = 0  # successful
             else:
@@ -70,12 +70,17 @@ def signup():
         username = request.form.get('user')
         password = request.form.get('pwd')
         response = {}
+
+
+        if user_services.signup_service(username, password) == 0:
+            session['uid'] = user_services.get_uid_by_username(username)
+            response['code'] = 0  # successful
+        else:
+            response['code'] = 500  # bad request
+
+
         try:
-            if user_services.signup_service(username, password):
-                session['uid'] = user_services.get_uid_by_username(username)
-                response['code'] = 0  # successful
-            else:
-                response['code'] = 1  # bad request
+            pass
         except AssertionError as e:
             import sys
             from datetime import datetime

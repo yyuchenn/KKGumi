@@ -2,6 +2,7 @@ from models import db
 
 
 class Manga(db.Model):
+    __tablename__ = "manga"
     mid = db.Column(db.Integer, primary_key=True)
     manga_name = db.Column(db.String(64))
 
