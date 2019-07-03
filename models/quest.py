@@ -1,6 +1,8 @@
-def quest_db(db):
-    """
-    :type db: flask_sqlalchemy.SQLAlchemy
-    """
-    class Quest(db.Model):
-        pass
+from models import db
+
+
+class Quest(db.Model):
+    qid = db.Column(db.Integer, primary_key=True)
+
+    def __repr__(self):
+        return '<Chapter %r>' % self.qid

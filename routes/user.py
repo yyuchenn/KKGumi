@@ -1,11 +1,10 @@
 from flask import Blueprint, request, render_template, session, redirect, url_for, make_response
-from . import services
+from services import user_services
 from functools import wraps
 from urllib.parse import parse_qs
 from json import JSONEncoder
 
 user_bp = Blueprint('user', __name__, static_folder='../static', template_folder='../templates', url_prefix='/')
-user_services = services.services.user_services  # make a shorter alias
 
 
 def is_login(func):
@@ -20,7 +19,6 @@ def is_login(func):
 
 @user_bp.route('/login', methods=['POST', 'GET'])
 def login():
-    global user_services
     callback = parse_qs(request.query_string).get(b'callback')
     if callback is None:
         callback = '/dashboard'  # default callback url
@@ -41,7 +39,10 @@ def login():
                 response['code'] = 0  # successful
             else:
                 response['code'] = 1  # password does not match
-        except:
+        except AssertionError as e:
+            import sys
+            from datetime import datetime
+            sys.stderr.write("%s - - %s\n" % (str(datetime.now()), e))
             response['code'] = 2  # fatal error
         return JSONEncoder().encode(response)
 
@@ -54,7 +55,6 @@ def logout():
 
 @user_bp.route('/signup', methods=['POST', 'GET'])
 def signup():
-    global user_services
     # setup callback url
     callback = parse_qs(request.query_string).get(b'callback')
     if callback is None:
@@ -76,6 +76,9 @@ def signup():
                 response['code'] = 0  # successful
             else:
                 response['code'] = 1  # bad request
-        except:
+        except AssertionError as e:
+            import sys
+            from datetime import datetime
+            sys.stderr.write("%s - - %s\n" % (str(datetime.now()), e))
             response['code'] = 2  # fatal error
         return JSONEncoder().encode(response)
