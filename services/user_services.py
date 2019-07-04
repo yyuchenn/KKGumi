@@ -35,6 +35,7 @@ def signup_service(username, password, i_code=None):
     check_username_format(username)
     check_password_format(password)
     # check i_code
+    invitation = None
     if i_code is None:
         pid = 3
     else:
@@ -75,7 +76,6 @@ def issue_invitation(uid, privilege_id):
     from models.privilege import Privilege
     from models import db
     user = User.query.filter_by(uid=uid).first()
-    print(uid)
     if user.privilege.issue_invitation:
         from secrets import token_urlsafe
         i_code = token_urlsafe(45)

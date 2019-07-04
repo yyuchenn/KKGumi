@@ -11,6 +11,7 @@ class User(db.Model):
     introduction = db.Column(db.String(512))
     gender = db.Column(db.Boolean)
     avatar = db.Column(db.LargeBinary)
+    join_time = db.Column(db.TIMESTAMP, default=db.func.now())
 
     privilege = db.relationship("Privilege", backref="users")
 

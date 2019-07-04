@@ -58,7 +58,6 @@ def logout():
 def signup():
     # setup callback url
     callback = parse_qs(request.query_string).get(b'callback')
-    print(callback)
     if callback is None:
         callback = '/dashboard'  # default callback url
     else:
