@@ -15,7 +15,7 @@ def dashboard():
 
 @dashboard_bp.route('/icode', methods=['GET', 'POST']) # TODO: remove GET method in the future
 @is_login
-def issue_icode():
+def icode():
     if request.method == 'GET':
         from services.user_services import get_user_by_uid
         return render_template('dashboard/invitation.html', user=get_user_by_uid(session['uid']))
@@ -25,3 +25,23 @@ def issue_icode():
     print(i_code)
     return JSONEncoder().encode(response)
 
+
+@dashboard_bp.route('/profile')
+@is_login
+def profile():
+    from services.user_services import get_user_by_uid
+    return render_template('dashboard/profile.html', user=get_user_by_uid(session['uid']))
+
+
+@dashboard_bp.route('/quest')
+@is_login
+def quest():
+    from services.user_services import get_user_by_uid
+    return render_template('dashboard/quest.html', user=get_user_by_uid(session['uid']))
+
+
+@dashboard_bp.route('/content')
+@is_login
+def content():
+    from services.user_services import get_user_by_uid
+    return render_template('dashboard/content.html', user=get_user_by_uid(session['uid']))

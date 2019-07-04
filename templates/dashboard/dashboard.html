@@ -1,48 +1,7 @@
-{% extends 'navbar.html' %}
+{% extends 'dashboard/sidebar.html' %}
 {% block title %}{{ user.nickname }} - 九九组{% endblock %}
-{% block head %}
-    <link href="/static/css/dashboard.css" rel="stylesheet">
-    {% block main_head %}{% endblock %}
-{% endblock %}
-{% block body %}
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-      <div class="sidebar-sticky">
-        <ul class="nav flex-column">
-
-          <li class="nav-item">
-              <li class="nav-item">
-            <a class="nav-link active" href="/dashboard">
-              {{ user.nickname }}
-            </a>
-            </li>
-            <a class="nav-link" href="/dashboard/quest">
-              任务
-            </a>
-            </li>
-            <a class="nav-link" href="/dashboard/content">
-              管理内容
-            </a>
-          </li>
-            <a class="nav-link" href="/dashboard/icode">
-              邀请码
-            </a>
-        </ul>
-
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>账户</span>
-        </h6>
-        <ul class="nav flex-column mb-2">
-          </li>
-            <li class="nav-item">
-            <a class="nav-link" href="/logout">
-              退出登录
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-        {% block main %}{% endblock %}
-    </main>
+{% block main_head %}{% endblock %}
+{% block dash %}active{% endblock %}
+{% block main %}
+    <h1 style="text-align: center">欢迎回来，{{ user.nickname }}</h1>
 {% endblock %}
