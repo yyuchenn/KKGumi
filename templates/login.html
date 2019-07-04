@@ -1,30 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Login Page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>登录 - 九九组</title>
+
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <style>
-        body {
-            text-align: center;
-            font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
         }
-        .title {
-            color: red;
-            font-size: large;
-            font-weight: bold;
-        }
-        button {
-            font-family: 'Consolas', 'Deja Vu Sans Mono', 'Bitstream Vera Sans Mono', monospace;
-        }
+      }
     </style>
+    <link href="/static/css/login.css" rel="stylesheet">
+
     <script src="/static/js/login.js"></script>
-</head>
-<body>
-<form>
-    <div class="title">登录</div>
-    <label for="user">用户名<input name="user" type="text"></label><br />
-    <label for="pwd">密码<input name="pwd" type="password"></label>
-    <div><button onclick="return login(user,pwd);">→</button></div>
+  </head>
+  <body class="text-center" data-gr-c-s-loaded="true">
+    <form class="form-signin">
+  <h1 class="h3 mb-3 font-weight-normal">请登录</h1>
+  <label for="inputUsername" class="sr-only">用户名</label>
+  <input name="user" type="username" id="inputUsername" class="form-control" placeholder="用户名" required="" autofocus="">
+  <label for="inputPassword" class="sr-only">密码</label>
+  <input name="pwd" type="password" id="inputPassword" class="form-control" placeholder="密码" required="">
+  <div style="color: #bd2130; visibility: hidden" id="errorMessage"> 网站错误，请刷新后重试。
+  </div>
+  <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="return login(user,pwd);">登录</button>
 </form>
+
+
 </body>
 </html>

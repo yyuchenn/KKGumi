@@ -8,6 +8,7 @@ class User(db.Model):
     password = db.Column(db.String(40), nullable=False)
     salt = db.Column(db.String(32), nullable=False)
     pid = db.Column(db.Integer, db.ForeignKey("privilege.pid"))
+    nickname = db.Column(db.String(64))
     introduction = db.Column(db.String(512))
     gender = db.Column(db.Boolean)
     avatar = db.Column(db.LargeBinary)

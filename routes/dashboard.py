@@ -10,12 +10,15 @@ dashboard_bp = Blueprint('dashboard', __name__, static_folder='../static', templ
 @is_login
 def dashboard():
     from services.user_services import get_user_by_uid
-    return render_template('dashboard.html', user=get_user_by_uid(session['uid']))
+    return render_template('dashboard/dashboard.html', user=get_user_by_uid(session['uid']))
 
 
-@dashboard_bp.route('/issue_icode', methods=['GET', 'POST']) # TODO: remove GET method in the future
+@dashboard_bp.route('/icode', methods=['GET', 'POST']) # TODO: remove GET method in the future
 @is_login
 def issue_icode():
+    if request.method == 'GET':
+        from services.user_services import get_user_by_uid
+        return render_template('dashboard/invitation.html', user=get_user_by_uid(session['uid']))
     privilege = 2 # TODO: For now, only issue privilege 2
     code, i_code = user_services.issue_invitation(session['uid'], privilege)
     response = {'code': code, 'i_code': i_code}

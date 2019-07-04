@@ -50,7 +50,7 @@ def signup_service(username, password, i_code=None):
     # create new user
     salt = token_urlsafe(20)
     password_encode = db.session.query(db.func.SHA1(password + salt)).first()[0]
-    new_user = User(username=username, password=password_encode, salt=salt, pid=pid, privilege=Privilege.query.get((pid,)))
+    new_user = User(username=username, password=password_encode, salt=salt, pid=pid, privilege=Privilege.query.get((pid,)), nickname=username)
     if invitation is not None:
         db.session.delete(invitation)
     db.session.add(new_user)

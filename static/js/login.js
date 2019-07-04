@@ -16,8 +16,13 @@ function login(user, pwd) {
                         }catch(e) {
                             window.location.href = "/dashboard";
                         } break;
-                    case 1: /* TODO*/ break;
-                    case 2: break;
+                    case 1:
+                        document.getElementById("errorMessage").setAttribute("style", "color: #bd2130");
+                        document.getElementById("errorMessage").innerHTML = "用户名或密码不正确。";
+                        return false;
+                    case 2:
+                        document.getElementById("errorMessage").setAttribute("style", "color: #bd2130");
+                        return false;
                 }
             });
             return false;

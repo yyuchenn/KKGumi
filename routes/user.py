@@ -44,7 +44,7 @@ def login():
             import sys
             from datetime import datetime
             sys.stderr.write("%s - - %s\n" % (str(datetime.now()), e))
-            response['code'] = 2  # fatal error
+            response['code'] = 500  # fatal error
         return JSONEncoder().encode(response)
 
 
@@ -85,5 +85,5 @@ def signup():
             import sys
             from datetime import datetime
             sys.stderr.write("%s - - %s\n" % (str(datetime.now()), e))
-            response['code'] = 2  # fatal error
+            response['code'] = 500  # fatal error
         return JSONEncoder().encode(response)
