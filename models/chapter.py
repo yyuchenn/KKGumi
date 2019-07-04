@@ -3,12 +3,14 @@ from models import db
 
 class Chapter(db.Model):
     __tablename__ = "chapter"
-    cid = db.Column(db.Integer, primary_key=True)
+    cid = db.Column(db.Integer, primary_key=True, autoincrement=True)
     chapter_name = db.Column(db.String(64))
+    aff_mid = db.Column(db.Integer, db.ForeignKey("manga.mid"))
+    release_fid = db.Column(db.Integer, db.ForeignKey("resource.fid"))
+    create_on = db.Column(db.TIMESTAMP, default=db.func.now())
 
-    def __init__(self, cid, chapter_name):
-        self.cid = cid
-        self.chapter_name = chapter_name
+    aff_manga = db.relationship("Manga", backref="chapter")
+    release_file = db.relationship("Resource")
 
     def __repr__(self):
         return '<Chapter %r>' % self.cid

@@ -96,9 +96,9 @@ def get_uid_by_username(username):
     return None
 
 
-def get_username_by_uid(uid):
+def get_user_by_uid(uid):
     from models.user import User
     user = User.query.filter_by(uid=uid).first()
     if user is not None:
-        return user.username
+        return user
     return None

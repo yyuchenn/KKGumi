@@ -9,7 +9,8 @@ dashboard_bp = Blueprint('dashboard', __name__, static_folder='../static', templ
 @dashboard_bp.route('')
 @is_login
 def dashboard():
-    return render_template('dashboard.html')
+    from services.user_services import get_user_by_uid
+    return render_template('dashboard.html', user=get_user_by_uid(session['uid']))
 
 
 @dashboard_bp.route('/issue_icode', methods=['GET', 'POST']) # TODO: remove GET method in the future
@@ -20,3 +21,4 @@ def issue_icode():
     response = {'code': code, 'i_code': i_code}
     print(i_code)
     return JSONEncoder().encode(response)
+
