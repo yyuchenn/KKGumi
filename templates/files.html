@@ -2,12 +2,23 @@
 {% block title %}文件 - 九九组{% endblock %}
 {% block head %}
     <style>
-    h1 {
-        color: #6c757d;
-        text-align: center;
-    }
+        h1.title {
+            color: #6c757d;
+            text-align: center;
+        }
     </style>
+    <link href="/static/css/summernote.css" rel="stylesheet">
+    <script src="/static/js/summernote.js"></script>
+    <script src="/static/css/lang/summernote-zh-CN.min.js"></script>
 {% endblock %}
 {% block body %}
-<h1>文件</h1>
+    <h1 class="title">文件</h1>
+    <div id="summernote" style="padding-top: 0"></div>
+    <script>
+        $(document).ready(function () {
+            $('#summernote').summernote({
+                lang: 'zh-CN',
+            });
+        });
+    </script>
 {% endblock %}

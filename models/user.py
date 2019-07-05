@@ -13,6 +13,7 @@ class User(db.Model):
     gender = db.Column(db.Boolean)
     avatar = db.Column(db.LargeBinary)
     join_time = db.Column(db.TIMESTAMP, default=db.func.now())
+    # TODO: add last_active column
 
     privilege = db.relationship("Privilege", backref="users", foreign_keys="User.pid")
 

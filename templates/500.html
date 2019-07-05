@@ -2,16 +2,17 @@
 {% block title %}500 - 九九组{% endblock %}
 {% block head %}
     <style>
-    h1, h2, h3 {
-        color: #6c757d;
-        text-align: center;
-    }
+        h1, h2, h3 {
+            color: #6c757d;
+            text-align: center;
+        }
     </style>
 {% endblock %}
 {% block body %}
-<h1>500 - 你干了什么？？？</h1>
+    <h1>500 - 你干了什么？？？</h1>
     <h2>如果你看到这个页面，那么恭喜你，服务器出错啦！</h2>
     <h3>要不你先返回<a href="/">首页</a>，清理一下网站缓存再试试？</h3>
     <h3>还有，别忘了联系管理员，把下面的错误信息告诉他！</h3>
-    <p><pre>{{ traceback }}</pre></p>
+    <p>
+    <pre>{{ traceback }}</pre></p>
 {% endblock %}
