@@ -31,3 +31,20 @@ def create_chapter(uid, name, mid):
     db.session.add(new_chapter)
     db.session.commit()
     return 0
+
+
+def get_manga_by_mid(mid):
+    from models.manga import Manga
+    manga = Manga.query.get(mid)
+    return manga
+
+
+def get_chapter_by_cid(cid):
+    from models.chapter import Chapter
+    chapter = Chapter.query.get(cid)
+    if chapter is not None:
+        manga = chapter.aff_manga
+        print(manga)
+        if manga is not None:
+            return chapter, manga
+    return None

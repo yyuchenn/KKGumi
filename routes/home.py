@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, session
+from .user import is_login
 
 home_bp = Blueprint('home', __name__, static_folder='../static', template_folder='../templates', url_prefix='/')
 
@@ -22,6 +23,7 @@ def about():
 
 
 @home_bp.route('/files')
+@is_login
 def files():
     if session.get('uid') is not None:
         from services.user_services import get_user_by_uid
@@ -30,10 +32,11 @@ def files():
         return render_template('files.html')
 
 
-@home_bp.route('/works')
-def works():
+@home_bp.route('/members')
+@is_login
+def members():
     if session.get('uid') is not None:
         from services.user_services import get_user_by_uid
-        return render_template('works.html', user=get_user_by_uid(session.get('uid')))
+        return render_template('members.html', user=get_user_by_uid(session.get('uid')))
     else:
-        return render_template('works.html')
+        return render_template('members.html')

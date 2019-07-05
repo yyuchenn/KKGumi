@@ -1,0 +1,18 @@
+{% extends 'navbar.html' %}
+{% block title %}{{ manga.manga_name }}{{ chapter.chapter_name }} - 九九组{% endblock %}
+{% block head %}
+    <style>
+    h1, h2 {
+        color: #6c757d;
+        text-align: center;
+    }
+    </style>
+{% endblock %}
+{% block body %}
+    <span class="content">
+    <div class="card-title">
+    <h1>{{ manga.manga_name }}</h1>
+    <h2>{{ chapter.chapter_name }}</h2>
+    </div>
+    </span>
+{% endblock %}
