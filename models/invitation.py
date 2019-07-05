@@ -7,8 +7,8 @@ class Invitation(db.Model):
     inviter_uid = db.Column(db.Integer, db.ForeignKey("user.uid"))
     privilege_id = db.Column(db.Integer, db.ForeignKey("privilege.pid"))
 
-    inviter = db.relationship("User", backref="invitation_codes")
-    privilege = db.relationship("Privilege", backref="invitation_codes")
+    inviter = db.relationship("User", backref="invitation_codes", foreign_keys="Invitation.inviter_uid")
+    privilege = db.relationship("Privilege", backref="invitation_codes", foreign_keys="Invitation.privilege_id")
 
     def __repr__(self):
         return '<Invitation %r>' % self.i_code

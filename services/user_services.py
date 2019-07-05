@@ -50,7 +50,7 @@ def signup_service(username, password, i_code=None):
     # create new user
     salt = token_urlsafe(20)
     password_encode = db.session.query(db.func.SHA1(password + salt)).first()[0]
-    new_user = User(username=username, password=password_encode, salt=salt, pid=pid, privilege=Privilege.query.get((pid,)), nickname=username)
+    new_user = User(username=username, password=password_encode, salt=salt, pid=pid, nickname=username)
     if invitation is not None:
         db.session.delete(invitation)
     db.session.add(new_user)
@@ -81,7 +81,7 @@ def issue_invitation(uid, privilege_id):
         i_code = token_urlsafe(45)
         while Invitation.query.filter_by(i_code=i_code).first() is not None:
             i_code = token_urlsafe(45)
-        new_invitation = Invitation(i_code=i_code, inviter_uid=uid, privilege_id=privilege_id, inviter=User.query.get((uid,)), privilege=Privilege.query.get((privilege_id,)))
+        new_invitation = Invitation(i_code=i_code, inviter_uid=uid, privilege_id=privilege_id)
         db.session.add(new_invitation)
         db.session.commit()
         return 0, i_code

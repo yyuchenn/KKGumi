@@ -10,7 +10,7 @@ class Resource(db.Model):
     uploader_uid = db.Column(db.Integer, db.ForeignKey("user.uid"))
     create_on = db.Column(db.TIMESTAMP, default=db.func.now())
 
-    uploader = db.relationship("User", backref="upload_file")
+    uploader = db.relationship("User", backref="upload_file", foreign_keys="Resource.uploader_uid")
 
     def __repr__(self):
         return '<Resource %r>' % self.fid

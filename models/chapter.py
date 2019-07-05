@@ -9,8 +9,8 @@ class Chapter(db.Model):
     release_fid = db.Column(db.Integer, db.ForeignKey("resource.fid"))
     create_on = db.Column(db.TIMESTAMP, default=db.func.now())
 
-    aff_manga = db.relationship("Manga", backref="chapter")
-    release_file = db.relationship("Resource")
+    aff_manga = db.relationship("Manga", backref="chapter", foreign_keys="Chapter.aff_mid")
+    release_file = db.relationship("Resource", foreign_keys="Chapter.release_fid")
 
     def __repr__(self):
         return '<Chapter %r>' % self.cid

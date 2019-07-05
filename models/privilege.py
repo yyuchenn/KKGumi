@@ -11,4 +11,4 @@ class Privilege(db.Model):
     issue_invitation = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
-        return '<Privilege %r>' % self.group_name
+        return '<Privilege %r>' % self.privilege_name

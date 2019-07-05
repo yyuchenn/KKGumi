@@ -14,7 +14,7 @@ class User(db.Model):
     avatar = db.Column(db.LargeBinary)
     join_time = db.Column(db.TIMESTAMP, default=db.func.now())
 
-    privilege = db.relationship("Privilege", backref="users")
+    privilege = db.relationship("Privilege", backref="users", foreign_keys="User.pid")
 
     '''
     def __init__(self, uid, username, password, salt, gid):
