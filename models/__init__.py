@@ -10,5 +10,6 @@ def init_app(app):
     from models import manga
     from models import chapter
     from models import resource
+    from models import quest
     from models import site
     db.init_app(app)

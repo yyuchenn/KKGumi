@@ -44,7 +44,17 @@ def get_chapter_by_cid(cid):
     chapter = Chapter.query.get(cid)
     if chapter is not None:
         manga = chapter.aff_manga
-        print(manga)
         if manga is not None:
             return chapter, manga
-    return None
+    return None, None
+
+
+def get_quest_by_qid(qid):
+    from models.quest import Quest
+    quest = Quest.query.get(qid)
+    if quest is not None:
+        chapter = quest.chapter
+        manga = quest.manga
+        if chapter is not None and manga is not None:
+            return quest, chapter, manga
+    return None, None, None

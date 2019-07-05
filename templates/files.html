@@ -7,19 +7,7 @@
             text-align: center;
         }
     </style>
-    <link href="/static/summernote/summernote-bs4.css" rel="stylesheet">
-    <script src="/static/summernote/summernote-bs4.js"></script>
-    <script src="/static/summernote/summernote-zh-CN.min.js"></script>
 {% endblock %}
 {% block body %}
     <h1 class="title">文件</h1>
-    <div id="summernote"></div>
-    <script>
-        $(document).ready(function () {
-            $('#summernote').summernote({
-                lang: 'zh-CN',
-                fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New']
-            });
-        });
-    </script>
 {% endblock %}
