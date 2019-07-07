@@ -13,7 +13,7 @@ def dashboard():
     return render_template('dashboard/dashboard.html', user=get_user_by_uid(session['uid']))
 
 
-@dashboard_bp.route('/icode', methods=['GET', 'POST']) # TODO: remove GET method in the future
+@dashboard_bp.route('/icode', methods=['GET', 'POST'])
 @is_login
 def icode():
     if request.method == 'GET':

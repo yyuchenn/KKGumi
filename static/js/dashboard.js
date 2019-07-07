@@ -1,7 +1,5 @@
 function issue_icode() {
             var postData = new FormData();
-            postData.append("user", user);
-            postData.append("pwd", pwd);
             fetch(window.location.search,{
                 method: "POST",
                 body: postData
@@ -9,12 +7,11 @@ function issue_icode() {
                 //console.log(j.toString());
                 switch (j["code"]) {
                     case 0:
-                        try {
-                            window.location.href = window.location.search.split("callback=")[1].split("&")[0];
-                        }catch(e) {
-                            window.location.href = "/dashboard";
-                        } break;
-                    case 1: /* TODO*/ break;
+                        window.location.href = window.location.href = '/dashboard/icode';
+                        break;
+                    case 1:
+                        window.location.href = window.location.href = '/dashboard';
+                        break;
                     case 2: break;
                 }
             });

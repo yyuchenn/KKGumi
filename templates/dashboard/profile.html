@@ -3,5 +3,22 @@
 {% block main_head %}{% endblock %}
 {% block profile %}active{% endblock %}
 {% block main %}
-    <h1 style="text-align: center">修改资料</h1>
+    <div class="content">
+        <div class="col-12">
+            <h1 style="text-align: center">修改资料</h1>
+        </div>
+        <div class="col-12">
+            <ul class="list-group">
+                <li class="list-group-item d-flex form-inline">
+                    <div>昵称：</div>
+                    <input type="text" class="form-control" value="{{ user.nickname }}">
+                    <button class="btn btn-primary" type="button">修改</button>
+                </li>
+                <li class="list-group-item d-flex form-inline">
+                    <div>密码：</div>
+                    <button type="button" class="btn btn-primary" onclick="">修改密码</button>
+                </li>
+            </ul>
+        </div>
+    </div>
 {% endblock %}

@@ -78,9 +78,9 @@ def issue_invitation(uid, privilege_id):
     user = User.query.filter_by(uid=uid).first()
     if user.privilege.issue_invitation:
         from secrets import token_urlsafe
-        i_code = token_urlsafe(45)
+        i_code = token_urlsafe(10)
         while Invitation.query.filter_by(i_code=i_code).first() is not None:
-            i_code = token_urlsafe(45)
+            i_code = token_urlsafe(10)
         new_invitation = Invitation(i_code=i_code, inviter_uid=uid, privilege_id=privilege_id)
         db.session.add(new_invitation)
         db.session.commit()

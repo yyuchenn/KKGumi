@@ -3,6 +3,24 @@
 {% block main_head %}{% endblock %}
 {% block icode %}active{% endblock %}
 {% block main %}
-    <h1 style="text-align: center">邀请码</h1>
-    <a style="text-align: center" href="/dashboard/icode">添加邀请</a>
+    <div class="content">
+        <div class="col-12">
+            <h1 style="text-align: center">邀请码</h1>
+        </div>
+        <div class="col-12">
+            <button type="button" class="btn btn-primary" onclick="issue_icode()">添加邀请</button>
+            <div class="icode-area" style="margin-top: 1rem;">
+                <ul class="list-group mb-3">
+                    {% for icode in user.invitation_codes %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center d-flex">
+                            <div>
+                                <a href="/signup?i_code={{ icode.i_code }}">{{ icode.i_code }}</a>
+                            </div>
+                            <span class="text-muted">{{ icode.privilege.privilege_name }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
 {% endblock %}

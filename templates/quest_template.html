@@ -45,10 +45,10 @@
             <div class="container">
                 <h1 class="jumbotron-heading">{{ manga.manga_name }}
                     {{ chapter.chapter_name }}{{ quest.quest_name }}</h1>
-                {% if not user %}<p class="lead text-muted">咕~咕~咕！</p>{% endif %}
+                {% if not user %}<p class="lead text-muted">承接人：{{ quest.accept_by.nickname }}</p>{% endif %}
                 <p>
-                    {% if user %}<a href="/dashboard/quest" class="btn btn-primary my-2">我的任务</a>
-                        <a href="#" class="btn btn-secondary my-2">添加漫画</a>{% endif %}
+                    {% if user %}<a href="/dashboard/quest" class="btn btn-primary my-2">提交任务</a>
+                        <a href="#" class="btn btn-secondary my-2">保存</a>{% endif %}
                 </p>
             </div>
         </section>

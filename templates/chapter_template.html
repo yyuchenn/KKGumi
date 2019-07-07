@@ -4,15 +4,29 @@
     <style>
         h1, h2 {
             color: #6c757d;
-            text-align: center;
         }
+
+        #container {
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+
+        .content {
+            margin-top: 2rem;
+        }
+
     </style>
 {% endblock %}
 {% block body %}
     <span class="content">
-    <div class="card-title">
-    <h1>{{ manga.manga_name }}</h1>
-    <h2>{{ chapter.chapter_name }}</h2>
+        <div class="content">
+        <div id="container" class="row">
+            <div class="col-lg-12">
+                <h1>{{ manga.manga_name }}</h1>
+                <h2>{{ chapter.chapter_name }}</h2>
+            </div>
+        </div>
+
     </div>
     </span>
 {% endblock %}
