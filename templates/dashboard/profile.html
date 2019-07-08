@@ -1,6 +1,19 @@
 {% extends 'dashboard/sidebar.html' %}
 {% block title %}修改资料 - 九九组{% endblock %}
-{% block main_head %}{% endblock %}
+{% block main_head %}
+    <script src="/static/js/profile.js"></script>
+    <script type="application/javascript">
+        window.onload = function () {
+            try {
+                success = window.location.search.split("success=")[1].split("&")[0];
+                document.getElementById("success-pop").setAttribute("style", "");
+            } catch (e) {
+                console.log("no!");
+            }
+        };
+
+    </script>
+{% endblock %}
 {% block profile %}active{% endblock %}
 {% block main %}
     <div class="content">
@@ -8,15 +21,75 @@
             <h1 style="text-align: center">修改资料</h1>
         </div>
         <div class="col-12">
+            <div id="success-pop" class="alert alert-success alert-dismissible fade show" role="alert"
+                 style="display: none;">
+                修改成功
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-12">
             <ul class="list-group">
-                <li class="list-group-item d-flex form-inline">
-                    <div>昵称：</div>
-                    <input type="text" class="form-control" value="{{ user.nickname }}">
-                    <button class="btn btn-primary" type="button">修改</button>
+                <li class="list-group-item d-flex">
+                    <form class="form-inline">
+                        <label class="col-form-label">昵称：</label>
+                        <input type="text" name="nickname" class="form-control" value="{{ user.nickname }}"
+                               pattern=".{1,32}">
+                        <button class="btn btn-primary" type="submit" onclick="return change_nickname(nickname);">修改
+                        </button>
+                    </form>
                 </li>
                 <li class="list-group-item d-flex form-inline">
                     <div>密码：</div>
-                    <button type="button" class="btn btn-primary" onclick="">修改密码</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#change_pwd">修改密码
+                    </button>
+
+                    <div class="modal fade" id="change_pwd" tabindex="-1" role="dialog"
+                         aria-labelledby="MangaModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">添加漫画</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form>
+                                    <div class="modal-body">
+
+                                        <div class="form-inline">
+                                            <label for="old_password">旧密码：</label>
+                                            <input name="old_password" type="password" id="inputOld" class="form-inline"
+                                                   required="required"
+                                                   autofocus=""></div>
+                                        <div class="form-inline">
+                                            <label for="new_password">新密码：</label>
+                                            <input name="new_password" type="password" id="inputNew" class="form-inline"
+                                                   required="required"
+                                                   autofocus=""></div>
+                                        <div class="form-inline">
+                                            <label for="new_password_repeat">再次确认：</label>
+                                            <input name="new_password_repeat" type="password" id="inputNew"
+                                                   class="form-inline"
+                                                   required="required"
+                                                   autofocus=""></div>
+
+                                        <div id="errorMessage" style="display: none;color: #bd2130;">系统错误。</div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消
+                                        </button>
+                                        <button type="button" class="btn btn-primary"
+                                                onclick="return change_password(old_password, new_password, new_password_repeat);">
+                                            修改
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                 </li>
             </ul>
         </div>

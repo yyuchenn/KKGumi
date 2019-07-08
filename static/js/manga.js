@@ -25,7 +25,6 @@ function create_manga(title, cover) {
                             return false;
                     }
                 });
-            }
-
+            };
             return false;
         }

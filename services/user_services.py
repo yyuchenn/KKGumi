@@ -88,6 +88,48 @@ def issue_invitation(uid, privilege_id):
     return 1, 0
 
 
+def change_nickname(uid, new_nickname):
+    from models.user import User
+    from models import db
+    user = User.query.get(uid)
+    # check nickname validity
+    if new_nickname is None or len(new_nickname) == 0 or len(new_nickname) > 32:
+        return 1
+    # change nickname
+    user.nickname = new_nickname
+    db.session.commit()
+    return 0
+
+
+def change_password(uid, old_password, new_password):
+    '''
+        :param uid: user id
+        :param old_password: old password of what the user input
+        :param new_password: new password of what the user input
+        :return: 0 for success. 1 for old password not match. 2 for new password illegal.
+        '''
+    from models.user import User
+    from models import db
+    user = User.query.get(uid)
+    # check if old password is correct.
+    check_code = login_service(user.username, old_password)
+    if check_code != 0:
+        return 1
+    # check new password format
+    try:
+        check_password_format(new_password)
+    except AssertionError as e:
+        return 2
+    # change password
+    from secrets import token_urlsafe
+    new_salt = token_urlsafe(20)
+    new_password_encode = db.session.query(db.func.SHA1(new_password + new_salt)).first()[0]
+    user.salt = new_salt
+    user.password = new_password_encode
+    db.session.commit()
+    return 0
+
+
 def get_uid_by_username(username):
     from models.user import User
     user = User.query.filter_by(username=username).first()

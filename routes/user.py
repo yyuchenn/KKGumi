@@ -87,3 +87,29 @@ def signup():
             sys.stderr.write("%s - - %s\n" % (str(datetime.now()), e))
             response['code'] = 500  # fatal error
         return JSONEncoder().encode(response)
+
+
+@user_bp.route('/dashboard/change_nickname', methods=['POST'])
+@is_login
+def change_nickname_route():
+    from services.user_services import change_nickname
+    uid = session.get('uid')
+    new_nickname = request.form.get('new_nickname')
+    code = change_nickname(uid, new_nickname)
+    response = {'code': code}
+    return JSONEncoder().encode(response)
+
+
+@user_bp.route('/dashboard/change_password', methods=['POST'])
+@is_login
+def change_password_route():
+    from services.user_services import change_password
+    uid = session.get('uid')
+    old_password = request.form.get('old_password')
+    new_password = request.form.get('new_password')
+    try:
+        code = change_password(uid, old_password, new_password)
+    except AssertionError as e:
+        code = 500
+    response = {'code': code}
+    return JSONEncoder().encode(response)

@@ -2,7 +2,6 @@ function signup(user, pwd, pwd2) {
             user = user.value;
             pwd = pwd.value;
             pwd2 = pwd2.value;
-            console.log(pwd," ", pwd2)
             if (pwd !== pwd2) {
                 document.getElementById("errorMessage").setAttribute("style", "color: #bd2130");
                 document.getElementById("errorMessage").innerHTML = "两次输入的密码不一致，请重试。";
