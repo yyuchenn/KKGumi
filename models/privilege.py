@@ -7,7 +7,8 @@ class Privilege(db.Model):
     privilege_name = db.Column(db.String(32), unique=True)
     operate_manga = db.Column(db.Boolean, default=False)
     operate_chapter = db.Column(db.Boolean, default=False)
-    accept_request = db.Column(db.Boolean, default=False)
+    operate_quest = db.Column(db.Boolean, default=False)
+    accept_quest = db.Column(db.Boolean, default=False)
     issue_invitation = db.Column(db.Boolean, default=False)
 
     def __repr__(self):

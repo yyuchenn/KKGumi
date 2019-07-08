@@ -98,6 +98,8 @@ def get_uid_by_username(username):
 
 def get_user_by_uid(uid):
     from models.user import User
+    if uid is None:
+        return None
     user = User.query.filter_by(uid=uid).first()
     if user is not None:
         return user

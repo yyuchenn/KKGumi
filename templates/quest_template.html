@@ -1,5 +1,5 @@
 {% extends 'navbar.html' %}
-{% block title %}{{ chapter.chapter_name }}{{ quest.quest_name }} - {{ manga.manga_name }} - 九九组{% endblock %}
+{% block title %}{{ quest.chapter.chapter_name }}{{ quest.quest_name }} - {{ quest.chapter.manga.manga_name }} - 九九组{% endblock %}
 {% block head %}
     <style>
         @media (min-width: 768px) {
@@ -43,8 +43,8 @@
     <main role="main">
         <section class="jumbotron text-center">
             <div class="container">
-                <h1 class="jumbotron-heading">{{ manga.manga_name }}
-                    {{ chapter.chapter_name }}{{ quest.quest_name }}</h1>
+                <h1 class="jumbotron-heading">{{ quest.chapter.manga.manga_name }}
+                    {{ quest.chapter.chapter_name }}{{ quest.quest_name }}</h1>
                 {% if not user %}<p class="lead text-muted">承接人：{{ quest.accept_by.nickname }}</p>{% endif %}
                 <p>
                     {% if user %}<a href="/dashboard/quest" class="btn btn-primary my-2">提交任务</a>
