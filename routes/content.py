@@ -13,11 +13,12 @@ def manga():
 
 @work_bp.route('/manga/<mid>')
 def manga_check(mid):
+    from services import statistics
     manga = get_manga_by_mid(mid)
     if manga is None:
         abort(404)
     from services.user_services import get_user_by_uid
-    return render_template('manga_template.html', user=get_user_by_uid(session.get('uid')), manga=manga)
+    return render_template('manga_template.html', user=get_user_by_uid(session.get('uid')), manga=manga, statistics=statistics)
 
 
 @work_bp.route('/chapter/<cid>')

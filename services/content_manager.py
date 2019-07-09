@@ -8,11 +8,10 @@ def create_manga(uid, name, cover=None):
     if not user.privilege.operate_manga:
         return 1
     # create manga
-    print(cover)
-    #cover = cover.encode()
     new_manga = Manga(manga_name=name, manga_cover=cover)
     db.session.add(new_manga)
     db.session.commit()
+    update_manga(new_manga)
     return 0
 
 
@@ -30,9 +29,34 @@ def create_chapter(uid, name, mid):
     if manga is None:
         return 2
     # create chapter
-    new_chapter = Chapter(chapter_name=name, aff_mid=mid, aff_manga=manga)
+    new_chapter = Chapter(chapter_name=name, aff_mid=mid)
     db.session.add(new_chapter)
     db.session.commit()
+    update_chapter(new_chapter)
+    # create two default quests
+    quest1_code = create_quest(uid, "翻译", "ARTICLE", new_chapter.cid)
+    quest2_code = create_quest(uid, "嵌字", "IMAGES", new_chapter.cid)
+    return 0
+
+
+def create_quest(uid, name, quest_type, cid):
+    from models import db
+    from models.user import User
+    from models.chapter import Chapter
+    from models.quest import Quest
+    # check user privilege
+    user = User.query.get(uid)
+    if not user.privilege.operate_quest:
+        return 1
+    # check chapter existence
+    chapter = Chapter.query.get(cid)
+    if chapter is None:
+        return 2
+    # create quest
+    new_quest = Quest(quest_name=name, quest_type=quest_type, cid=cid, create_uid=uid)
+    db.session.add(new_quest)
+    db.session.commit()
+    update_quest(new_quest)
     return 0
 
 
@@ -66,3 +90,23 @@ def get_quest_by_qid(qid):
         if chapter is not None and manga is not None:
             return quest, chapter, manga
     return None, None, None
+
+
+def update_manga(manga):
+    from models import db
+    manga.last_update = db.func.now()
+    db.session.commit()
+
+
+def update_chapter(chapter):
+    from models import db
+    chapter.last_update = db.func.now()
+    db.session.commit()
+    update_manga(chapter.manga)
+
+
+def update_quest(quest):
+    from models import db
+    quest.last_update = db.func.now()
+    db.session.commit()
+    update_chapter(quest.chapter)

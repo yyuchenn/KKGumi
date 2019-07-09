@@ -8,8 +8,13 @@ class Chapter(db.Model):
     aff_mid = db.Column(db.Integer, db.ForeignKey("manga.mid"))
     release_rid = db.Column(db.Integer, db.ForeignKey("resource.rid"))
     create_on = db.Column(db.TIMESTAMP, default=db.func.now())
+    last_update = db.Column(db.TIMESTAMP, default=db.func.now())
+    status = db.Column(db.String(32), default="WORKING")  # ["WORKING", "HALT", "FINISHED"]
 
-    manga = db.relationship("Manga", backref="chapter", foreign_keys="Chapter.aff_mid")
+    __mapper_args__ = {
+        "order_by": create_on.desc()}
+
+    manga = db.relationship("Manga", backref="chapters", foreign_keys="Chapter.aff_mid")
     release_file = db.relationship("Resource", foreign_keys="Chapter.release_rid")
 
     def __repr__(self):

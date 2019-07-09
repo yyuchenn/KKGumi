@@ -22,6 +22,7 @@
             -ms-user-select: none; /* Internet Explorer/Edge */
         }
     </style>
+    <script src="/static/js/manga.js"></script>
 {% endblock %}
 {% block body %}
     <div class="content">
@@ -35,28 +36,67 @@
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-muted">章节</span>
                     <span>
-                    <span class="badge badge-primary badge-pill">12</span>
-                    <span class="badge badge-danger badge-pill">3</span>
-                    <span class="badge badge-success badge-pill">2</span></span>
+                    {% if statistics.count_on_chapters(manga, 'WORKING') > 0 %}<span class="badge badge-primary badge-pill">{{ statistics.count_on_chapters(manga, 'WORKING') }}</span>{% endif %}
+                    {% if statistics.count_on_quests_in_manga(manga, 'HIRING') > 0 %}<span class="badge badge-danger badge-pill">{{ statistics.count_on_quests_in_manga(manga, 'HIRING') }}</span>{% endif %}
+                    {% if statistics.count_on_chapters(manga, 'FINISHED') > 0 %}<span class="badge badge-success badge-pill">{{ statistics.count_on_chapters(manga, 'FINISHED') }}</span></span>{% endif %}
                 </h4>
 
                 <div class="row">
 
-                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style="margin-left: 0.5rem; margin-top: 0.5rem">
-                        第20话<span class="badge badge-danger badge-pill">3</span>
+                    {% for chapter in manga.chapters %}
+                    <button type="button" class="btn btn-{% if chapter.status == 'WORKING' %}primary{% elif chapter.status == 'HALT' %}warning{% else %}success{% endif %} dropdown-toggle" data-toggle="dropdown" style="margin-left: 0.5rem; margin-top: 0.5rem">
+                        {{ chapter.chapter_name }}{% if chapter.status != 'HALT' and statistics.count_on_quests(chapter,'HIRING') > 0 %}<span class="badge badge-danger badge-pill">{{ statistics.count_on_quests(chapter,'HIRING') }}</span>{% endif %}
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">翻译</a>
-                            <a class="dropdown-item" href="#">嵌字</a>
-                            <a class="dropdown-item" href="#">补丁</a>
+                            {% for quest in chapter.quests %}
+                            <a class="dropdown-item" href="/quest/{{ quest.qid }}">{{ quest.quest_name }}</a>
+                            {% endfor %}
                         </div>
                     </button>
-
+                    {% endfor %}
                 </div>
             </div>
             <div class="col-md-3 order-md-1">
                 <img src="{{ manga.manga_cover }}" class="img-fluid rounded shadow-sm"/>
                 <h4 class="text-muted">Metadata</h4>
-                <div class="text-body">开坑时间: 2019年4月</div>
+                {% if user.privilege.operate_manga %}
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#add_manga">
+                                添加章节
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="add_manga" tabindex="-1" role="dialog"
+                                 aria-labelledby="MangaModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">添加漫画</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div><form>
+                                        <div class="modal-body">
+
+                                                <div class="form-inline">
+                                                <label for="chapter_title">章节标题：</label>
+                                                <input name="chapter_title" type="text" id="inputTitle" class="form-inline"
+                                                       required="required"
+                                                       autofocus=""></div>
+
+                                            <div id="errorMessage"></div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">取消
+                                            </button>
+                                            <button type="button" class="btn btn-primary" onclick="return create_chapter(chapter_title, {{ manga.mid }});">添加章节</button>
+                                        </div></form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                <div class="text-body"><b>开坑时间: </b>2019年4月</div>
+                <div class="text-body"><b>状态：</b>工作中</div>
+                <div class="text-body"><b>備考：</b><p>挺好的。</p></div>
             </div>
 
         </div>

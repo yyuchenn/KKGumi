@@ -13,18 +13,9 @@ class User(db.Model):
     gender = db.Column(db.Boolean)
     avatar = db.Column(db.LargeBinary)
     join_time = db.Column(db.TIMESTAMP, default=db.func.now())
-    # TODO: add last_active column
+    last_active = db.Column(db.TIMESTAMP, default=db.func.now())
 
     privilege = db.relationship("Privilege", backref="users", foreign_keys="User.pid")
-
-    '''
-    def __init__(self, uid, username, password, salt, gid):
-        self.uid = uid
-        self.username = username
-        self.password = password
-        self.salt = salt
-        self.gid = gid
-    '''
 
     def __repr__(self):
         return '<User %r>' % self.username

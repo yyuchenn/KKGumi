@@ -5,7 +5,6 @@ def login_service(username, password):
     :param password: password of what the user input
     :return: 0 for success. 1 for not match.
     '''
-    # TODO
     from models import db
     from models.user import User
     check_username_format(username)
@@ -103,11 +102,11 @@ def change_nickname(uid, new_nickname):
 
 def change_password(uid, old_password, new_password):
     '''
-        :param uid: user id
-        :param old_password: old password of what the user input
-        :param new_password: new password of what the user input
-        :return: 0 for success. 1 for old password not match. 2 for new password illegal.
-        '''
+    :param uid: user id
+    :param old_password: old password of what the user input
+    :param new_password: new password of what the user input
+    :return: 0 for success. 1 for old password not match. 2 for new password illegal.
+    '''
     from models.user import User
     from models import db
     user = User.query.get(uid)
