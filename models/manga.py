@@ -11,8 +11,5 @@ class Manga(db.Model):
     last_update = db.Column(db.TIMESTAMP, default=db.func.now())
     status = db.Column(db.String(32), default="WORKING")  # ["WORKING", "HALT", "FINISHED"] TODO: make it into enum type
 
-    __mapper_args__ = {
-        "order_by": last_update.desc()}
-
     def __repr__(self):
         return '<Manga %r>' % self.mid

@@ -60,9 +60,47 @@ def create_quest(uid, name, quest_type, cid):
     return 0
 
 
+def manga_title(uid, new_title, mid):
+    from models import db
+    from models.user import User
+    from models.manga import Manga
+    # check user privilege
+    user = User.query.get(uid)
+    if not user.privilege.operate_quest:
+        return 1
+    # check manga existence
+    manga = Manga.query.get(mid)
+    if manga is None:
+        return 2
+    # change title
+    manga.manga_name = new_title
+    db.session.commit()
+    update_manga(manga)
+    return 0
+
+
+def manga_cover(uid, new_cover, mid):
+    from models import db
+    from models.user import User
+    from models.manga import Manga
+    # check user privilege
+    user = User.query.get(uid)
+    if not user.privilege.operate_quest:
+        return 1
+    # check manga existence
+    manga = Manga.query.get(mid)
+    if manga is None:
+        return 2
+    # change title
+    manga.manga_cover = new_cover
+    db.session.commit()
+    update_manga(manga)
+    return 0
+
+
 def get_mangas():
     from models.manga import Manga
-    return Manga.query.all()
+    return Manga.query.filter_by().order_by(Manga.last_update.desc())
 
 
 def get_manga_by_mid(mid):

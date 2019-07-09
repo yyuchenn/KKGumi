@@ -11,10 +11,7 @@ class Chapter(db.Model):
     last_update = db.Column(db.TIMESTAMP, default=db.func.now())
     status = db.Column(db.String(32), default="WORKING")  # ["WORKING", "HALT", "FINISHED"]
 
-    __mapper_args__ = {
-        "order_by": create_on.desc()}
-
-    manga = db.relationship("Manga", backref="chapters", foreign_keys="Chapter.aff_mid")
+    manga = db.relationship("Manga", backref=db.backref("chapters", order_by=create_on.desc()), foreign_keys="Chapter.aff_mid") # TODO: order doesn't work
     release_file = db.relationship("Resource", foreign_keys="Chapter.release_rid")
 
     def __repr__(self):
