@@ -8,7 +8,8 @@ work_bp = Blueprint('content', __name__, static_folder='../static', template_fol
 def manga():
     from services.user_services import get_user_by_uid
     from services.content_manager import get_mangas
-    return render_template('manga.html', user=get_user_by_uid(session.get('uid')), mangas=get_mangas())
+    from services import statistics
+    return render_template('manga.html', user=get_user_by_uid(session.get('uid')), mangas=get_mangas(), statistics=statistics)
 
 
 @work_bp.route('/manga/<mid>')

@@ -55,84 +55,94 @@
 
         <section class="jumbotron text-center">
             <p class="container">
-                <h1 class="jumbotron-heading">工作进度</h1>
-                {% if not user %}
-                    <p class="lead text-muted">
-                        <span class="badge badge-primary badge-pill">12</span>进行中
-                        <span class="badge badge-danger badge-pill">3</span>未开始
-                        <span class="badge badge-success badge-pill">2</span>已完成</p>
-                {% endif %}
+            <h1 class="jumbotron-heading">工作进度</h1>
+            {% if not user %}
+                <p class="lead text-muted">
+                    <span class="badge badge-primary badge-pill">{{ statistics.count_on_chapters_in_mangas(mangas, 'WORKING') }}</span>进行中
+                    <span class="badge badge-danger badge-pill">{{ statistics.count_on_quests_in_mangas(mangas, 'HIRING') }}</span>未开始
+                    <span class="badge badge-success badge-pill">{{ statistics.count_on_chapters_in_mangas(mangas, 'FINISHED') }}</span>已完成</p>
+            {% endif %}
 
-                {% if user and user.privilege.accept_quest %}
-                    <p>
-                        <a href="/dashboard/quest" class="btn btn-primary my-2">我的任务</a>
-                        <a href="/quest" class="btn btn-primary my-2">任务广场</a>
-                        {% if user.privilege.operate_manga %}
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-secondary" data-toggle="modal"
-                                    data-target="#add_manga">
-                                添加漫画
-                            </button>
+            {% if user and user.privilege.accept_quest %}
+                <p>
+                    <a href="/dashboard/quest" class="btn btn-primary my-2">我的任务</a>
+                    <a href="/quest" class="btn btn-primary my-2">任务广场</a>
+                    {% if user.privilege.operate_manga %}
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-secondary" data-toggle="modal"
+                                data-target="#add_manga">
+                            添加漫画
+                        </button>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="add_manga" tabindex="-1" role="dialog"
-                                 aria-labelledby="MangaModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="exampleModalLabel">添加漫画</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div><form>
+                        <!-- Modal -->
+                        <div class="modal fade" id="add_manga" tabindex="-1" role="dialog"
+                             aria-labelledby="MangaModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">添加漫画</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form>
                                         <div class="modal-body">
 
-                                                <div class="form-inline">
+                                            <div class="form-inline">
                                                 <label for="manga_title">标题：</label>
-                                                <input name="manga_title" type="text" id="inputTitle" class="form-inline"
+                                                <input name="manga_title" type="text" id="inputTitle"
+                                                       class="form-inline"
                                                        required="required"
                                                        autofocus=""></div>
-                                                <div class="form-inline">
+                                            <div class="form-inline">
                                                 <label for="manga_cover">封面：</label>
-                                                <input name="manga_cover" type="file" id="inputCover" class="form-inline"
-                                                       required="required" accept="image/png,image/gif,image/jpeg"></div>
+                                                <input name="manga_cover" type="file" id="inputCover"
+                                                       class="form-inline"
+                                                       required="required" accept="image/png,image/gif,image/jpeg">
+                                            </div>
 
                                             <div id="errorMessage"></div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">取消
                                             </button>
-                                            <button type="button" class="btn btn-primary" onclick="return create_manga(manga_title, manga_cover);">添加</button>
-                                        </div></form>
-                                    </div>
+                                            <button type="button" class="btn btn-primary"
+                                                    onclick="return create_manga(manga_title, manga_cover);">添加
+                                            </button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
-                        {% endif %}
-                    </p>
-                {% endif %}
-            </div>
+                        </div>
+                    {% endif %}
+                </p>
+            {% endif %}
         </section>
 
         <div class="album py-5 bg-light">
             <div class="container">
                 <div class="row">
                     {% for manga in mangas %}
-                    <div class="col-lg-3 col-md-4 col-sm-6" onclick="window.location.href='/manga/{{ manga.mid }}'">
-                        <div class="card mb-4 shadow-sm">
-                            <img src="{{ manga.manga_cover }}" class="img-fluid card-img-top manga-cover">
-                            <div class="card-body">
-                                <p class="card-text">{{ manga.manga_name }}</p>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <span class="badge badge-primary badge-pill">12</span>
-                                        <span class="badge badge-danger badge-pill">3</span>
-                                        <span class="badge badge-success badge-pill">2</span>
+                        <div class="col-lg-3 col-md-4 col-sm-6" onclick="window.location.href='/manga/{{ manga.mid }}'">
+                            <div class="card mb-4 shadow-sm">
+                                <img src="{{ manga.manga_cover }}" class="img-fluid card-img-top manga-cover">
+                                <div class="card-body">
+                                    <p class="card-text">{{ manga.manga_name }}</p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            {% if statistics.count_on_chapters(manga, 'WORKING') > 0 %}
+                                                <span class="badge badge-primary badge-pill">{{ statistics.count_on_chapters(manga, 'WORKING') }}</span>{% endif %}
+                                            {% if statistics.count_on_quests_in_manga(manga, 'HIRING') > 0 %}
+                                                <span class="badge badge-danger badge-pill">{{ statistics.count_on_quests_in_manga(manga, 'HIRING') }}</span>{% endif %}
+                                            {% if statistics.count_on_chapters(manga, 'FINISHED') > 0 %}
+                                                <span class="badge badge-success badge-pill">{{ statistics.count_on_chapters(manga, 'FINISHED') }}</span>
+                                            {% endif %}
+                                        </div>
+                                        <small class="text-muted">{{ manga.last_update.year }}年{{ manga.last_update.month }}月{{ manga.last_update.day }}日</small>
                                     </div>
-                                    <small class="text-muted">{{ manga.last_update.year }}年{{ manga.last_update.month }}月{{ manga.last_update.day }}日</small>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     {% endfor %}
                 </div>
             </div>

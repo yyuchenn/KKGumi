@@ -20,8 +20,19 @@ def count_on_quests_in_manga(manga, status):
     chapters = manga.chapters
     count = 0
     for chapter in chapters:
-        quests = chapter.quests
-        for quest in quests:
-            if quest.status == status:
-                count += 1
+        count += count_on_quests(chapter, status)
+    return count
+
+
+def count_on_quests_in_mangas(mangas, status):
+    count = 0
+    for manga in mangas:
+        count += count_on_quests_in_manga(manga, status)
+    return count
+
+
+def count_on_chapters_in_mangas(mangas, status):
+    count = 0
+    for manga in mangas:
+        count += count_on_chapters(manga, status)
     return count
