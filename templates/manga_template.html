@@ -211,13 +211,13 @@
                 <div class="text-body">
                     <b>开坑时间: </b>{{ manga.create_on.year }}年{{ manga.create_on.month }}月{{ manga.create_on.day }}日
                 </div>
-                <div class="text-body"><b>状态：</b>
+                <div class="text-body"><b>状态: </b>
                     {% if manga.status == 'WORKING' %}<span class="badge badge-primary badge-pill">进行中</span>
                     {% elif manga.status == 'HALT' %}<span class="badge badge-warning badge-pill">坑</span>
                     {% elif manga.status == 'FINISHED' %}
                         <span class="badge badge-success badge-pill">已完结</span>{% else %}{{ manga.status }}{% endif %}
                 </div>
-                <div class="text-body"><b>備考：</b>
+                <div class="text-body"><b>備考: </b>
                     <p>挺好的。</p></div>
             </div>
 
