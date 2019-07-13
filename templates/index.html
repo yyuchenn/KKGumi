@@ -35,9 +35,15 @@
         }
 
     </style>
+    <script src="/static/js/time_util.js"></script>
+    <script>
+        setInterval(function () {
+            $("#lapse").html(timelapse(1563060530));
+        }, 1000);
+    </script>
 {% endblock %}
 {% block body %}
-
+<h1 id="lapse">0</h1>
     <div class="container">
         <section class="jumbotron text-center">
             <p class="container">
