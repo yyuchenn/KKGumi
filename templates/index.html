@@ -36,27 +36,28 @@
 
     </style>
     <script src="/static/js/time_util.js"></script>
-    <script>
-        setInterval(function () {
-            $("#lapse").html(timelapse(1563060530));
-        }, 1000);
-    </script>
+    <script src="/static/js/guild.js"></script>
 {% endblock %}
 {% block body %}
-<h1 id="lapse">0</h1>
     <div class="container">
         <section class="jumbotron text-center">
             <p class="container">
             <h1 class="jumbotron-heading">任务动态</h1>
 
-                <p class="lead text-muted">
-                    {% if not user or not user.privilege.accept_quest%}
+            <p class="lead text-muted">
+                {% if not user or not user.privilege.accept_quest %}
                     咕咕咕~
-                    {% endif %}
-                    {% if user and user.privilege.accept_quest %}
-                        <a href="/dashboard/quest" class="btn btn-primary my-2">我的任务</a>
-                    {% endif %}
-                </p>
+                {% endif %}
+                {% if user and user.privilege.accept_quest %}
+                    <a href="/dashboard/quest" class="btn btn-primary my-2">我的任务</a>
+                    <div id="success-pop" class="alert alert-danger alert-dismissible fade show" role="alert">
+                        咕咕提醒：您已经咕了<b id="goo"><script>setTimer("goo", {{ user.last_active.timestamp() }})</script></b>啦！
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endif %}
+            </p>
 
 
         </section>
@@ -71,22 +72,20 @@
                     {% for quest in get_quests("HIRING") %}
                         <li class="list-group-item d-flex justify-content-between lh-condensed">
                             <div>
-                                <a class="my-0 h6" href="/quest/{{ quest.qid }}">{{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
+                                <a class="my-0 h6" href="/quest/{{ quest.qid }}">
+                                    {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
                                 <small class="text-muted">Brief description</small>
                             </div>
-                            <span class="text-muted"><button role="button" class="btn-primary">承接</button></span>
+                            <div>
+                                <span class="text-muted"><button role="button" class="btn-primary" onclick="return accept_quest({{ user.uid }}, {{ quest.qid }});">承接</button></span>
+                                {% if user.privilege.operate_quest %}
+                                    <span class="text-muted"><button role="button"
+                                                                     class="btn-secondary">分配</button></span>
+                                {% endif %}
+                            </div>
                         </li>
                     {% endfor %}
                 </ul>
-
-                <form class="card p-2">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Promo code">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-secondary">Redeem</button>
-                        </div>
-                    </div>
-                </form>
             </div>
         {% endif %}
         <div class="col-md-12 mb-4">
@@ -98,10 +97,13 @@
                 {% for quest in get_quests("WORKING") %}
                     <li class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
-                            <a class="my-0 h6" href="/quest/{{ quest.qid }}">{{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
-                            <small class="text-muted">担当: <a href="/user/{{ quest.accept_uid }}">{{ quest.accept_by.username }}</a></small>
+                            <a class="my-0 h6" href="/quest/{{ quest.qid }}">
+                                {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
+                            <small class="text-muted">担当: <a
+                                    href="/user/{{ quest.accept_uid }}">{{ quest.accept_by.username }}</a></small>
                         </div>
-                        <span class="text-muted">12小时5分钟</span>
+                        <span class="text-muted" id="qid{{ quest.qid }}"
+                              style="font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', monospace"><script>setTimer("qid{{ quest.qid }}", {{ quest.last_update.timestamp() }})</script></span>
                     </li>
                 {% endfor %}
             </ul>

@@ -16,9 +16,27 @@ function ms2string(s) {
   var dys = (s - hrs) / 24;
 
 
-  return (dys !== 0?(dys+'天'):"") + (hrs !== 0?(hrs+'小时'):"") + (mins !== 0?(mins+'分钟'):"") + secs+'秒';
+
+  return (dys !== 0?(dys+'天'):"") + (hrs !== 0 || dys !== 0?(("0"+hrs).slice(-2)+'小时'):"") + (mins !== 0 || hrs !== 0 || dys !== 0 ?(("0"+mins).slice(-2)+'分钟'):"") + ("0"+secs).slice(-2) +'秒';
+}
+
+function setTimer(id, stamp) {
+    // jQuery Required
+    $().ready(function () {
+        $("#" + id).html(timelapse(stamp));
+    });
+    setInterval(function () {
+        $("#" + id).html(timelapse(stamp));
+    }, 1000);
+}
+
+function setLocalTime(id, stamp) {
+    $().ready(function () {
+        $("#" + id).html(localtime(stamp));
+    });
 }
 
 function localtime(stamp) {
-    //TODO
+    var time = new Date(stamp * 1000);
+    return time.getFullYear() + "年" + time.getMonth() + "月" + time.getDay() + "日";
 }

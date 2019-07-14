@@ -48,6 +48,7 @@
         }
     </style>
     <script src="/static/js/manga.js"></script>
+    <script src="/static/js/time_util.js"></script>
 {% endblock %}
 {% block body %}
 
@@ -137,7 +138,7 @@
                                                 <span class="badge badge-success badge-pill">{{ statistics.count_on_chapters(manga, 'FINISHED') }}</span>
                                             {% endif %}
                                         </div>
-                                        <small class="text-muted">{{ manga.last_update.year }}年{{ manga.last_update.month }}月{{ manga.last_update.day }}日</small>
+                                        <small class="text-muted" id="mid{{ manga.mid }}"><script>setLocalTime("mid{{ manga.mid }}", {{ manga.last_update.timestamp() }})</script></small>
                                     </div>
                                 </div>
                             </div>

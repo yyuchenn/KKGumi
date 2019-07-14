@@ -4,12 +4,14 @@ def init_app(app):
     from .content import work_bp
     from .user import user_bp
     from .admin import admin_bp
+    from .guild import guild_bp
     from flask import render_template
     app.register_blueprint(home_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(work_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(admin_bp)
+    app.register_blueprint(guild_bp)
 
     @app.errorhandler(404)
     def page_not_found(error):
