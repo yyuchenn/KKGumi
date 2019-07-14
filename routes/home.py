@@ -24,10 +24,3 @@ def about():
 def files():
     from services.user_services import get_user_by_uid
     return render_template('files.html', user=get_user_by_uid(session.get('uid')))
-
-
-@home_bp.route('/members')
-@is_login
-def members():
-    from services.user_services import get_user_by_uid
-    return render_template('members.html', user=get_user_by_uid(session.get('uid')))

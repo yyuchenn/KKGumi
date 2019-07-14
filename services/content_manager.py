@@ -103,11 +103,15 @@ def get_mangas():
     return Manga.query.filter_by().order_by(Manga.last_update.desc())
 
 
-def get_quests(status=None):
+def get_quests(uid=None, status=None):
     from models.quest import Quest
-    if status is None:
+    if status is None and uid is None:
         return Quest.query.filter_by().order_by(Quest.last_update.desc())
-    return Quest.query.filter_by(status=status).order_by(Quest.last_update.desc())
+    if status is None:
+        return Quest.query.filter_by(accept_uid=uid).order_by(Quest.last_update.desc())
+    if uid is None:
+        return Quest.query.filter_by(status=status).order_by(Quest.last_update.desc())
+    return Quest.query.filter_by(status=status, accept_uid=uid).order_by(Quest.last_update.desc())
 
 
 def get_manga_by_mid(mid):

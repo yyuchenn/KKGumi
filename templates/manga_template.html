@@ -23,6 +23,7 @@
         }
     </style>
     <script src="/static/js/manga.js"></script>
+    <script src="/static/js/time_util.js"></script>
 {% endblock %}
 {% block body %}
     <div class="content">
@@ -209,7 +210,7 @@
                     </div>
                 {% endif %}
                 <div class="text-body">
-                    <b>开坑时间: </b>{{ manga.create_on.year }}年{{ manga.create_on.month }}月{{ manga.create_on.day }}日
+                    <b>开坑时间: </b><span id="open_time"><script>setLocalTime("open_time", {{ manga.create_on.timestamp() }})</script></span>
                 </div>
                 <div class="text-body"><b>状态: </b>
                     {% if manga.status == 'WORKING' %}<span class="badge badge-primary badge-pill">进行中</span>

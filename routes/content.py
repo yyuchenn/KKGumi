@@ -31,7 +31,6 @@ def chapter_check(cid):
     return render_template('chapter_template.html', user=get_user_by_uid(session.get('uid')), chapter=chapter, manga=manga)
 
 
-
 @work_bp.route('/quest/<qid>')
 def quest_check(qid):
     quest, chapter, manga = get_quest_by_qid(qid)

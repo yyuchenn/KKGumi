@@ -22,7 +22,6 @@ def icode():
     privilege = 2 # TODO: For now, only issue privilege 2
     code, i_code = user_services.issue_invitation(session['uid'], privilege)
     response = {'code': code, 'i_code': i_code}
-    print(i_code)
     return JSONEncoder().encode(response)
 
 
@@ -37,7 +36,8 @@ def profile():
 @is_login
 def quest():
     from services.user_services import get_user_by_uid
-    return render_template('dashboard/quest.html', user=get_user_by_uid(session['uid']))
+    from services.content_manager import get_quests
+    return render_template('dashboard/quest.html', user=get_user_by_uid(session['uid']), get_quests=get_quests)
 
 
 @dashboard_bp.route('/content')

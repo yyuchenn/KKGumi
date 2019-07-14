@@ -145,3 +145,8 @@ def get_user_by_uid(uid):
     if user is not None:
         return user
     return None
+
+
+def get_users():
+    from models.user import User
+    return User.query.filter_by().order_by(User.last_active.desc())

@@ -1,0 +1,62 @@
+{% extends 'navbar.html' %}
+{% block title %}{{ member.nickname }} - 九九组{% endblock %}
+{% block head %}
+    <style>
+        #container {
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+
+        .content {
+            margin-top: 2rem;
+        }
+
+        h1 {
+            color: #6c757d;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Chrome/Safari/Opera */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+        }
+    </style>
+    <script src="/static/js/time_util.js"></script>
+{% endblock %}
+{% block body %}
+    <div class="content">
+        <div id="container" class="row">
+            <div class="col-lg-12">
+                <span class="h1">{{ member.nickname }}</span><span class="text-muted">@{{ member.username }}</span>
+            </div>
+        </div>
+        <div id="container" class="row">
+            <div class="col-md-9 order-md-2 mb-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">进行中的任务</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    {% for quest in get_quests(uid=member.uid, status="WORKING") %}
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <a class="my-0 h6" href="/quest/{{ quest.qid }}">
+                                    {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
+                                <small class="text-muted"></small>
+                            </div>
+                            <span class="text-muted" id="qid{{ quest.qid }}"
+                                  style="font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', monospace"><script>setTimer("qid{{ quest.qid }}", {{ quest.accept_on.timestamp() }})</script></span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-3 order-md-1">
+                <h4 class="text-muted">Metadata</h4>
+                <div class="text-body">
+                    <b>加入时间: </b><span id="join_date"><script>setLocalTime("join_date", {{ member.join_time.timestamp() }})</script></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
