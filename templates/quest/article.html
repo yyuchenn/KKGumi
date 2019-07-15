@@ -1,0 +1,26 @@
+{% extends 'quest/quest_template.html' %}
+{% block quest_head %}
+    <link href="/static/summernote/summernote-bs4.css" rel="stylesheet">
+    <script src="/static/summernote/summernote-bs4.js"></script>
+    <script src="/static/summernote/summernote-zh-CN.min.js"></script>
+{% endblock %}
+{% block quest_body %}
+    <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">翻译稿</span>
+        {% if user and quest.accept_by == user and quest.status == "WORKING" %}
+            <button type="button" class="btn btn-secondary">保存</button>{% endif %}
+    </h4>
+    <div id="summernote"></div>
+    {% if user and quest.accept_by == user and quest.status == "WORKING" %}
+        <script>
+            $(document).ready(function () {
+                $('#summernote').summernote({
+                    lang: 'zh-CN',
+                    airMode: false,
+                    placeholder: '点按这里开始键入内容',
+                    fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New']
+                });
+            });
+        </script>
+    {% endif %}
+{% endblock %}

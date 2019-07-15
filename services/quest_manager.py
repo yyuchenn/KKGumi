@@ -2,6 +2,7 @@ def accept_quest(agent_uid, accept_uid, qid):
     from models.user import User
     from models.quest import Quest
     from models import db
+    agent_uid = str(agent_uid)
     # check agent privilege
     if agent_uid != accept_uid:
         if not User.query.get(agent_uid).privilege.operate_quest:

@@ -24,11 +24,6 @@
                         </a>
                     </li>
                 {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link {% block content %}{% endblock %}" href="/dashboard/content">
-                        管理内容
-                    </a>
-                </li>
                 {% if user.privilege.operate_manga %}
                     <li class="nav-item">
                         <a class="nav-link {% block icode %}{% endblock %}" href="/dashboard/icode">

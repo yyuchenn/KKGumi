@@ -37,4 +37,4 @@ def quest_check(qid):
     if quest is None:
         abort(404)
     from services.user_services import get_user_by_uid
-    return render_template('quest_template.html', user=get_user_by_uid(session.get('uid')), quest=quest,)
+    return render_template('quest/article.html', user=get_user_by_uid(session.get('uid')), quest=quest, )

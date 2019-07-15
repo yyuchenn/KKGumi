@@ -1,0 +1,101 @@
+{% extends 'navbar.html' %}
+{% block title %}{{ quest.chapter.chapter_name }}{{ quest.quest_name }} - {{ quest.chapter.manga.manga_name }} -
+    九九组{% endblock %}
+{% block head %}
+    <style>
+        #container {
+            margin-left: 5%;
+            margin-right: 5%;
+        }
+
+        .content {
+            margin-top: 2rem;
+        }
+
+        h1 {
+            color: #6c757d;
+        }
+
+        .noselect {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Chrome/Safari/Opera */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+        }
+    </style>
+    <script src="/static/js/time_util.js"></script>
+    {% block quest_head %}{% endblock %}
+{% endblock %}
+{% block body %}
+    <div class="content">
+        <div id="container" class="row">
+            <div class="col-lg-12">
+                <span class="h1">{{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</span>
+            </div>
+        </div>
+        <div id="container" class="row">
+            <div class="col-md-9 order-md-2 mb-4">
+                <div class="container">
+                    {% block quest_body %}{% endblock %}
+                </div>
+            </div>
+            <div class="col-md-3 order-md-1">
+                {% if user %}
+                    <div class="button-group">
+                        {% if user.privilege.accept_quest %}
+                            {% if quest.status == "HIRING" %}
+                                <button type="button" class="btn btn-primary">承接</button>
+                            {% endif %}
+                            {% if quest.status == "WORKING" and quest.accept_by == user %}
+                                <button type="button" class="btn btn-primary">完成任务</button>
+                            {% endif %}
+                        {% endif %}
+                        {% if user.privilege.operate_quest %}
+                            {% if quest.status == "HIRING" %}
+                                <button type="button" class="btn btn-secondary">分配</button>
+                                <button type="button" class="btn btn-warning">关闭任务</button>
+                            {% endif %}
+                            {% if quest.status == "WORKING" %}
+                                <button type="button" class="btn btn-secondary">另请高明</button>
+                                <button type="button" class="btn btn-warning">关闭任务</button>
+                            {% endif %}
+                            {% if quest.status == "FINISHED" %}
+                                <button type="button" class="btn btn-warning">再开任务</button>
+                            {% endif %}
+                            {% if quest.status == "CLOSED" %}
+                                <button type="button" class="btn btn-warning">再开任务</button>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <div class="metadata">
+                    <h4 class="text-muted">Metadata</h4>
+                    {% if quest.status == "HIRING" %}
+                        <div class="text-body">
+                            <b>创建时间: </b><span id="create_on"><script>setLocalTime("create_on", {{ quest.create_on.timestamp() }})</script></span>
+                        </div>
+                    {% endif %}
+                    {% if quest.status == "WORKING" or quest.status == "FINISHED" %}
+
+                        <div class="text-body">
+                            <b>承接人：</b><a href="/member/{{ quest.accept_uid }}">{{ quest.accept_by.nickname }}</a>
+                        </div>
+                        <div class="text-body">
+                            <b>承接时间：</b><span id="accept_on"><script>setLocalTime("accept_on", {{ quest.create_on.timestamp() }})</script></span>
+                        </div>
+                        {% if quest.status == "WORKING" %}
+                            <div class="text-body">
+                                <b>最后更新于</b><span id="last_update"><script>setLocalTime("last_update", {{ quest.last_update.timestamp() }})</script></span>
+                            </div>
+                        {% endif %}
+                        {% if quest.status == "FINISHED" %}
+                            <div class="text-body">
+                                <b>完成于</b><span id="complete_on"><script>setLocalTime("complete_on", {{ quest.complete_on.timestamp() }})</script></span>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -2,6 +2,25 @@
 {% block title %}成员 - 九九组{% endblock %}
 {% block head %}
     <style>
+        .jumbotron {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            margin-bottom: 0;
+            background-color: #fff;
+        }
+
+        .jumbotron p:last-child {
+            margin-bottom: 0;
+        }
+
+        .jumbotron-heading {
+            font-weight: 300;
+        }
+
+        .jumbotron .container {
+            max-width: 40rem;
+        }
+
         h1 {
             color: #6c757d;
             text-align: center;
@@ -10,18 +29,26 @@
 {% endblock %}
 {% block body %}
     <div class="container">
-    <h1>成员</h1>
-     <ul class="list-group mb-3">
-                {% for member in get_users() %}
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <div>
-                            <a class="my-0 h6" href="/member/{{ member.uid }}">
-                                {{ member.nickname }}</a><br>
-                            <small class="text-muted">@{{ member.username }}</small>
-                        </div>
-                        <span class="text-muted">{{ member.privilege.privilege_name }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
+        <section class="jumbotron text-center">
+            <p class="container">
+            <h1 class="jumbotron-heading">汉化组成员</h1>
+            {% if not user %}
+                <p class="lead text-muted">
+                </p>
+            {% endif %}
+
+        </section>
+        <ul class="list-group mb-3">
+            {% for member in get_users() %}
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div>
+                        <a class="my-0 h6" href="/member/{{ member.uid }}">
+                            {{ member.nickname }}</a><br>
+                        <small class="text-muted">@{{ member.username }}</small>
+                    </div>
+                    <span class="text-muted">{{ member.privilege.privilege_name }}</span>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
 {% endblock %}
