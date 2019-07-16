@@ -129,6 +129,15 @@ def change_password(uid, old_password, new_password):
     return 0
 
 
+def update_user(uid):
+    from models.user import User
+    from models import db
+    user = User.query.get(uid)
+    if user is not None:
+        user.last_active = db.func.now()
+        db.session.commit()
+
+
 def get_uid_by_username(username):
     from models.user import User
     user = User.query.filter_by(username=username).first()

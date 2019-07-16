@@ -6,12 +6,21 @@
 {% endblock %}
 {% block quest_body %}
     <h4 class="d-flex justify-content-between align-items-center mb-3">
-        <span class="text-muted">翻译稿</span>
+        <span class="text-muted">上传文件</span>
         {% if user and quest.accept_by == user and quest.status == "WORKING" %}
-            <button type="button" class="btn btn-secondary" onclick="return update_article({{ quest.qid }})">保存</button>{% endif %}
+            <button type="button" class="btn btn-secondary">上传</button>{% endif %}
     </h4>
-    <div id="summernote">{% if quest.resource %}{{ quest.resource.inline_blob }}{% endif %}</div>
+    <div id="summernote"></div>
     {% if user and quest.accept_by == user and quest.status == "WORKING" %}
-        <script src="/static/js/quest_uploader.js"></script>
+        <script>
+            $(document).ready(function () {
+                $('#summernote').summernote({
+                    lang: 'zh-CN',
+                    airMode: false,
+                    placeholder: '点按这里开始键入内容',
+                    fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New']
+                });
+            });
+        </script>
     {% endif %}
 {% endblock %}
