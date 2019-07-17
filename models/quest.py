@@ -6,6 +6,7 @@ class Quest(db.Model):
     qid = db.Column(db.Integer, primary_key=True)
     quest_name = db.Column(db.String(64))
     quest_type = db.Column(db.String(64))  # see `conf.QUEST_TYPES` for possible values
+    public_access = db.Column(db.Boolean, default=True)
     cid = db.Column(db.Integer, db.ForeignKey("chapter.cid"))
     create_on = db.Column(db.TIMESTAMP, default=db.func.now())
     create_uid = db.Column(db.Integer, db.ForeignKey("user.uid"))

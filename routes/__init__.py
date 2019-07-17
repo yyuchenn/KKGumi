@@ -6,6 +6,7 @@ def init_app(app):
     from .admin import admin_bp
     from .guild import guild_bp
     from .member import member_bp
+    from .resource import resource_bp
     from flask import render_template
     app.register_blueprint(home_bp)
     app.register_blueprint(dashboard_bp)
@@ -14,6 +15,7 @@ def init_app(app):
     app.register_blueprint(admin_bp)
     app.register_blueprint(guild_bp)
     app.register_blueprint(member_bp)
+    app.register_blueprint(resource_bp)
 
     @app.errorhandler(404)
     def page_not_found(error):
