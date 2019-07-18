@@ -5,16 +5,16 @@ def upload_resource(file, user, path):
     pass
 
 
-def create_resource(filename, uid, path):
+def create_resource(filename, uid, filepath):
     from models.resource import Resource
     from models import db
     from os import path
     from os import makedirs
     secure_filename(filename)
-    if not path.exists(RESOURCE_FOLDER + path):
-        makedirs(RESOURCE_FOLDER + path)
-    new_file = open(path.join(RESOURCE_FOLDER + path, filename), "w")
-    new_resource = Resource(resource_name=filename, resource_path=path, uploader_uid=uid)
+    if not path.exists(RESOURCE_FOLDER + filepath):
+        makedirs(RESOURCE_FOLDER + filepath)
+    new_file = open(path.join(RESOURCE_FOLDER + filepath, filename), "w")
+    new_resource = Resource(resource_name=filename, resource_path=filepath, uploader_uid=uid)
     db.session.add(new_resource)
     db.session.commit()
     return new_resource.rid

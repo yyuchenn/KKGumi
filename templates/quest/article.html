@@ -3,14 +3,25 @@
     <link href="/static/summernote/summernote-bs4.css" rel="stylesheet">
     <script src="/static/summernote/summernote-bs4.js"></script>
     <script src="/static/summernote/summernote-zh-CN.min.js"></script>
+
     <script>
     $(document).ready(function () {
-        fetch("/resource/quest/{{ quest.qid }}/article.html").then(response => response.text()).then(function (r) {
+        fetch("/resource/quest/{{ quest.qid }}/article.html").then(function(response) {
+            if (response.status === 404)
+                return  "";
+            if (response.status === 403)
+                return  "您暂无权限浏览。";
+            return response.text();
+        }).then(function (r) {
             console.log(r);
+
             $("#summernote").html(r);
+
+            load_editor({{ quest.qid }});
         });
     });
     </script>
+
 {% endblock %}
 {% block quest_body %}
     <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -19,7 +30,7 @@
             <button type="button" class="btn btn-secondary" onclick="return update_article({{ quest.qid }})">保存
             </button>{% endif %}
     </h4>
-    <div id="summernote"></div>
+    <div id="summernote">加载中...</div>
     {% if user and quest.accept_by == user and quest.status == "WORKING" %}
         <script src="/static/js/quest_uploader.js"></script>
     {% endif %}
