@@ -13,10 +13,7 @@
                 return  "您暂无权限浏览。";
             return response.text();
         }).then(function (r) {
-            console.log(r);
-
             $("#summernote").html(r);
-
             load_editor({{ quest.qid }});
         });
     });

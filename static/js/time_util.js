@@ -36,7 +36,18 @@ function setLocalTime(id, stamp) {
     });
 }
 
+function setLocalTime_exact(id, stamp) {
+    $().ready(function () {
+        $("#" + id).html(localtime_exact(stamp));
+    });
+}
+
 function localtime(stamp) {
     var time = new Date(stamp * 1000);
     return time.getFullYear() + "年" + (time.getMonth()+1) + "月" + time.getDate() + "日";
+}
+
+function localtime_exact(stamp) {
+    var time = new Date(stamp * 1000);
+    return time.getFullYear() + "年" + (time.getMonth()+1) + "月" + time.getDate() + "日 " + ("0"+time.getHours()).slice(-2) + ":" + ("0"+time.getMinutes()).slice(-2);
 }

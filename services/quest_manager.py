@@ -119,3 +119,22 @@ def reopen_quest(uid, qid):
     db.session.commit()
     return 0
 
+
+def transfer_quest(uid, qid):
+    from models import db
+    from services.user_services import get_user_by_uid
+    from services.resource_manager import delete_resource
+    # check user privilege
+    quest = get_quest_by_qid(qid)
+    user = get_user_by_uid(uid)
+    if not user.privilege.operate_quest:
+        return 1
+    # update quest
+    quest.status = "HIRING"
+    quest.accept_uid = None
+    res = quest.resource
+    quest.resource_rid = None
+    db.session.commit()
+    if res is not None:
+        delete_resource(res, res.uploader_uid)
+    return 0

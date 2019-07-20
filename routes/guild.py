@@ -68,3 +68,13 @@ def reopen_quest():
     qid = request.form.get('qid')
     code = reopen_quest(uid, qid)
     return JSONEncoder().encode({'code': code})
+
+
+@guild_bp.route('/transfer_quest', methods=['POST'])
+@is_login
+def transfer_quest():
+    from services.quest_manager import transfer_quest
+    uid = session.get('uid')
+    qid = request.form.get('qid')
+    code = transfer_quest(uid, qid)
+    return JSONEncoder().encode({'code': code})

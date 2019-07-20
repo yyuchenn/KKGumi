@@ -7,6 +7,8 @@ function load_editor(qid) {
         callbacks: {
             onImageUpload: function (files, editor, $editable) {
                 UploadFiles(files, insertImg, qid);
+            },
+            onMediaDelete: function (target) {
             }
         }
     });
@@ -25,33 +27,38 @@ function load_editor(qid) {
 }
 
 
-function insertImg(urls){
-    for(tag in urls){
-        $('#summernote').summernote('editor.insertImage',urls[tag]);
+function insertImg(urls) {
+    for (tag in urls) {
+        $('#summernote').summernote('editor.insertImage', urls[tag], function ($image) {
+            $image.css({
+                display: '',
+                width: '100%'
+            })
+        });
     }
 }
 
 
-function UploadFiles(files,func, qid){
+function UploadFiles(files, func, qid) {
     var formData = new FormData();
     formData.append('qid', qid);
-    for(f in files){
+    for (f in files) {
         formData.append(f, files[f]);
     }
 
     fetch("/guild/upload_file", {
         method: "POST",
         body: formData,
-    }).then(response => response.json()).then(function (j){
-                switch (j["code"]) {
-                    case 0:
-                        urls = j["urls"];
-                        func(urls);
-                        break;
-                    case 500:
-                        return false;
-                }
-            });
+    }).then(response => response.json()).then(function (j) {
+        switch (j["code"]) {
+            case 0:
+                urls = j["urls"];
+                func(urls);
+                break;
+            case 500:
+                return false;
+        }
+    });
     return false;
 }
 

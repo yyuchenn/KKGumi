@@ -36,7 +36,7 @@
         </div>
         <div id="container" class="row">
             <div class="col-md-9 order-md-2 mb-4">
-                <div class="container">
+                <div style="word-break:break-all;">
                     {% block quest_body %}{% endblock %}
                 </div>
             </div>
@@ -96,7 +96,7 @@
                     </div>
                     {% if quest.status == "HIRING" %}
                         <div class="text-body">
-                            <b>创建时间: </b><span id="create_on"><script>setLocalTime("create_on", {{ quest.create_on.timestamp() }})</script></span>
+                            <b>创建时间: </b><span id="create_on"><script>setLocalTime_exact("create_on", {{ quest.create_on.timestamp() }})</script></span>
                         </div>
                     {% endif %}
                     {% if quest.status == "WORKING" or quest.status == "FINISHED" %}
@@ -105,16 +105,16 @@
                             <b>承接人：</b><a href="/member/{{ quest.accept_uid }}">{{ quest.accept_by.nickname }}</a>
                         </div>
                         <div class="text-body">
-                            <b>承接时间：</b><span id="accept_on"><script>setLocalTime("accept_on", {{ quest.create_on.timestamp() }})</script></span>
+                            <b>承接时间：</b><span id="accept_on"><script>setLocalTime_exact("accept_on", {{ quest.create_on.timestamp() }})</script></span>
                         </div>
                         {% if quest.status == "WORKING" %}
                             <div class="text-body">
-                                <b>最后更新于</b><span id="last_update"><script>setLocalTime("last_update", {{ quest.last_update.timestamp() }})</script></span>
+                                <b>最后更新于</b><span id="last_update"><script>setLocalTime_exact("last_update", {{ quest.last_update.timestamp() }})</script></span>
                             </div>
                         {% endif %}
                         {% if quest.status == "FINISHED" %}
                             <div class="text-body">
-                                <b>完成于</b><span id="complete_on"><script>setLocalTime("complete_on", {{ quest.complete_on.timestamp() }})</script></span>
+                                <b>完成于</b><span id="complete_on"><script>setLocalTime_exact("complete_on", {{ quest.complete_on.timestamp() }})</script></span>
                             </div>
                         {% endif %}
                     {% endif %}
