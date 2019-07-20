@@ -25,6 +25,19 @@ def accept_quest(agent_uid, accept_uid, qid):
     return 0
 
 
+def finish_quest(uid, qid):
+    from models import db
+    # check user privilege
+    quest = get_quest_by_qid(qid)
+    if quest.accept_uid != uid:
+        return 1
+    # mark it finish
+    quest.complete_on = db.func.now()
+    quest.status = "FINISHED"
+    db.session.commit()
+    return 0
+
+
 def update_article(uid, qid, article):
     from models.quest import Quest
     from models import db
@@ -72,3 +85,37 @@ def register_content(uid, quest, files):
 def get_quest_by_qid(qid):
     from models.quest import Quest
     return Quest.query.get(qid)
+
+
+def close_quest(uid, qid):
+    from models import db
+    from services.user_services import get_user_by_uid
+    # check user privilege
+    quest = get_quest_by_qid(qid)
+    user = get_user_by_uid(uid)
+    if not user.privilege.operate_quest:
+        return 1
+    # mark it close
+    quest.complete_on = db.func.now()
+    quest.status = "CLOSED"
+    db.session.commit()
+    return 0
+
+
+def reopen_quest(uid, qid):
+    from models import db
+    from services.user_services import get_user_by_uid
+    # check user privilege
+    quest = get_quest_by_qid(qid)
+    user = get_user_by_uid(uid)
+    if not user.privilege.operate_quest:
+        return 1
+    # mark it close
+    quest.complete_on = db.func.now()
+    if quest.accept_uid is not None:
+        quest.status = "WORKING"
+    else:
+        quest.status = "HIRING"
+    db.session.commit()
+    return 0
+

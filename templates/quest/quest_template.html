@@ -24,6 +24,7 @@
         }
     </style>
     <script src="/static/js/time_util.js"></script>
+    <script src="/static/js/quest.js"></script>
     {% block quest_head %}{% endblock %}
 {% endblock %}
 {% block body %}
@@ -44,32 +45,55 @@
                     <div class="button-group">
                         {% if user.privilege.accept_quest %}
                             {% if quest.status == "HIRING" %}
-                                <button type="button" class="btn btn-primary">承接</button>
+                                <script src="/static/js/guild.js"></script>
+                                <button type="button" class="btn btn-primary"
+                                        onclick="return accept_quest({{ user.uid }}, {{ quest.qid }});">承接
+                                </button>
                             {% endif %}
                             {% if quest.status == "WORKING" and quest.accept_by == user %}
-                                <button type="button" class="btn btn-primary">完成任务</button>
+                                <button type="button" class="btn btn-primary"
+                                        onclick="return finish_quest({{ quest.qid }});">完成任务
+                                </button>
                             {% endif %}
                         {% endif %}
                         {% if user.privilege.operate_quest %}
                             {% if quest.status == "HIRING" %}
                                 <button type="button" class="btn btn-secondary">分配</button>
-                                <button type="button" class="btn btn-warning">关闭任务</button>
+                                <button type="button" class="btn btn-warning"
+                                        onclick="return close_quest({{ quest.qid }});">关闭任务
+                                </button>
                             {% endif %}
                             {% if quest.status == "WORKING" %}
-                                <button type="button" class="btn btn-secondary">另请高明</button>
-                                <button type="button" class="btn btn-warning">关闭任务</button>
+                                <button type="button" class="btn btn-secondary"
+                                        onclick="return transfer_quest({{ quest.qid }});">另请高明
+                                </button>
+                                <button type="button" class="btn btn-warning"
+                                        onclick="return close_quest({{ quest.qid }});">关闭任务
+                                </button>
                             {% endif %}
                             {% if quest.status == "FINISHED" %}
-                                <button type="button" class="btn btn-warning">再开任务</button>
+                                <button type="button" class="btn btn-warning"
+                                        onclick="return reopen_quest({{ quest.qid }});">再开任务
+                                </button>
                             {% endif %}
                             {% if quest.status == "CLOSED" %}
-                                <button type="button" class="btn btn-warning">再开任务</button>
+                                <button type="button" class="btn btn-warning"
+                                        onclick="return reopen_quest({{ quest.qid }});">再开任务
+                                </button>
                             {% endif %}
                         {% endif %}
                     </div>
                 {% endif %}
                 <div class="metadata">
                     <h4 class="text-muted">Metadata</h4>
+                    <div class="text-body"><b>状态: </b>
+                        {% if quest.status == 'WORKING' %}<span class="badge badge-primary badge-pill">进行中</span>
+                        {% elif quest.status == 'CLOSED' %}<span class="badge badge-warning badge-pill">已终止</span>
+                        {% elif quest.status == 'HIRING' %}<span class="badge badge-danger badge-pill">征集中</span>
+                        {% elif quest.status == 'FINISHED' %}
+                            <span class="badge badge-success badge-pill">已完成</span>{% else %}
+                            {{ manga.status }}{% endif %}
+                    </div>
                     {% if quest.status == "HIRING" %}
                         <div class="text-body">
                             <b>创建时间: </b><span id="create_on"><script>setLocalTime("create_on", {{ quest.create_on.timestamp() }})</script></span>

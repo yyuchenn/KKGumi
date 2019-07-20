@@ -7,7 +7,6 @@ function load_editor(qid) {
         callbacks: {
             onImageUpload: function (files, editor, $editable) {
                 UploadFiles(files, insertImg, qid);
-                //editor.insertImage($editable, "/resource/quest/%E5%8E%9F%E5%9B%BE.png");
             }
         }
     });
@@ -54,22 +53,6 @@ function UploadFiles(files,func, qid){
                 }
             });
     return false;
-    /*
-    $.ajax({
-        data: formData,
-        type: "POST",
-        url: "/upload_file",
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function(imageUrl) {
-            func(imageUrl);
-
-        },
-        error: function() {
-            console.log("uploadError");
-        }
-    })*/
 }
 
 function update_article(qid) {

@@ -17,6 +17,16 @@ def accept_quest():
     return JSONEncoder().encode({'code': code})
 
 
+@guild_bp.route('/finish_quest', methods=['POST'])
+@is_login
+def finish_quest():
+    from services.quest_manager import finish_quest
+    uid = session.get('uid')
+    qid = request.form.get('qid')
+    code = finish_quest(uid, qid)
+    return JSONEncoder().encode({'code': code})
+
+
 @guild_bp.route('/update_article', methods=['POST'])
 @is_login
 def update_article():
@@ -33,9 +43,28 @@ def update_article():
 @is_login
 def guild_upload_file():
     from services.quest_manager import get_quest_by_qid, register_content
-    #print(request.form)
     uid = session.get('uid')
     qid = request.form.get('qid')
     urls = register_content(uid, get_quest_by_qid(qid), request.files)
     response = {'code': 0, 'urls': urls}
     return JSONEncoder().encode(response)
+
+
+@guild_bp.route('/close_quest', methods=['POST'])
+@is_login
+def close_quest():
+    from services.quest_manager import close_quest
+    uid = session.get('uid')
+    qid = request.form.get('qid')
+    code = close_quest(uid, qid)
+    return JSONEncoder().encode({'code': code})
+
+
+@guild_bp.route('/reopen_quest', methods=['POST'])
+@is_login
+def reopen_quest():
+    from services.quest_manager import reopen_quest
+    uid = session.get('uid')
+    qid = request.form.get('qid')
+    code = reopen_quest(uid, qid)
+    return JSONEncoder().encode({'code': code})
