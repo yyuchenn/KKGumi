@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, session, send_from_directory, abort
+from flask import Blueprint, render_template, session, send_from_directory, abort, request
 from .user import is_login
+from json import JSONEncoder
 
 resource_bp = Blueprint('resource', __name__, static_folder='../static', template_folder='../templates', url_prefix='/')
 
@@ -16,3 +17,8 @@ def resource_distribute(filepath):
 @resource_bp.route('/pan/<path:path>')
 def pan_folder(path):
     return "绝赞开发中~"
+
+
+@resource_bp.route('/upload_file', methods=['POST'])
+def upload_file():
+    pass

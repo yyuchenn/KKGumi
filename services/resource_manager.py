@@ -1,23 +1,43 @@
 from conf import RESOURCE_FOLDER
 
 
-def upload_resource(file, user, path):
-    pass
+def upload_resource(file, uid, filepath):
+    from models.resource import Resource
+    from services.user_services import get_user_by_uid
+    from models import db
+    from os import path
+    from os import makedirs
+    secure_filename(file.filename)
+    # check user privilege
+    if get_user_by_uid(uid).privilege.upload_file is False:
+        return 1
+    if not path.exists(RESOURCE_FOLDER + filepath):
+        makedirs(RESOURCE_FOLDER + filepath)
+    # TODO: filename clash detect
+    file.save(path.join(RESOURCE_FOLDER + filepath, file.filename))
+    new_resource = Resource(resource_name=file.filename, resource_path=filepath, uploader_uid=uid)
+    db.session.add(new_resource)
+    db.session.commit()
+    return new_resource
 
 
 def create_resource(filename, uid, filepath):
     from models.resource import Resource
+    from services.user_services import get_user_by_uid
     from models import db
     from os import path
     from os import makedirs
     secure_filename(filename)
+    # check user privilege
+    if get_user_by_uid(uid).privilege.upload_file is False:
+        return 1
     if not path.exists(RESOURCE_FOLDER + filepath):
         makedirs(RESOURCE_FOLDER + filepath)
     new_file = open(path.join(RESOURCE_FOLDER + filepath, filename), "w")
     new_resource = Resource(resource_name=filename, resource_path=filepath, uploader_uid=uid)
     db.session.add(new_resource)
     db.session.commit()
-    return new_resource.rid
+    return new_resource
 
 
 def update_resource(res, content, uid):
@@ -54,3 +74,7 @@ def retrieve_info(filepath):
     if res.count() != 0 and res[0].public_access is False:
         accessibility = False
     return dirname, basename, accessibility
+
+
+def get_resource_url(res):
+    return "/resource/" + res.resource_path + "/" + res.resource_name

@@ -53,10 +53,22 @@ def update_article(uid, qid, article):
 def register_article(uid, quest, filename):
     from services.resource_manager import create_resource
     from models import db
-    rid = create_resource(filename, uid, "quest/" + str(quest.qid))
+    rid = create_resource(filename, uid, "quest/" + str(quest.qid)).rid
     quest.resource_rid = rid
     db.session.commit()
 
 
-def register_content(uid, qid, file):
-    pass
+def register_content(uid, quest, files):
+    from services.resource_manager import upload_resource, get_resource_url
+    from models import db
+    urls = {}
+    for filetag in files:
+        resource = upload_resource(files[filetag], uid, "quest/" + str(quest.qid))
+        db.session.commit()
+        urls[filetag] = get_resource_url(resource)
+    return urls
+
+
+def get_quest_by_qid(qid):
+    from models.quest import Quest
+    return Quest.query.get(qid)

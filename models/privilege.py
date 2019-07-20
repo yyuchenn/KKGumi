@@ -10,6 +10,8 @@ class Privilege(db.Model):
     operate_quest = db.Column(db.Boolean, default=False)
     accept_quest = db.Column(db.Boolean, default=False)
     issue_invitation = db.Column(db.Boolean, default=False)
+    upload_file = db.Column(db.Boolean, default=False)
+    delete_file = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
         return '<Privilege %r>' % self.privilege_name
