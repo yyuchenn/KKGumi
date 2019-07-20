@@ -20,5 +20,18 @@ def pan_folder(path):
 
 
 @resource_bp.route('/upload_file', methods=['POST'])
+@is_login
 def upload_file():
     pass
+
+
+@resource_bp.route('/delete_file', methods=['POST'])
+@is_login
+def delete_file():
+    from services.resource_manager import delete_resource, get_resource_by_uri
+    uid = session.get('uid')
+    uri = request.form.get('uri')
+    print(uri)
+    code = delete_resource(get_resource_by_uri(uri), uid)
+    response = {'code': code}
+    return JSONEncoder().encode(response)
