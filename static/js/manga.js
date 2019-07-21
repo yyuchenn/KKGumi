@@ -225,3 +225,43 @@ function save_notes(mid) {
     destry_editor();
     return false;
 }
+
+function delete_chapter(cid) {
+    var postData = new FormData();
+    postData.append("cid", cid);
+    fetch("/admin/delete_chapter", {
+        method: "POST",
+        body: postData
+    }).then(response => response.json()).then(function (j) {
+        switch (j["code"]) {
+            case 0:
+                window.location.reload();
+                break;
+            case 1:
+                console.log("权限不足。");
+                return false;
+        }
+    });
+    return false;
+}
+
+
+function delete_manga(mid) {
+    // 已弃用
+    var postData = new FormData();
+    postData.append("mid", mid);
+    fetch("/admin/delete_manga", {
+        method: "POST",
+        body: postData
+    }).then(response => response.json()).then(function (j) {
+        switch (j["code"]) {
+            case 0:
+                window.location.reload();
+                break;
+            case 1:
+                console.log("权限不足。");
+                return false;
+        }
+    });
+    return false;
+}

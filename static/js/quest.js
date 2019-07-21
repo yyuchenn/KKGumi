@@ -93,3 +93,22 @@ function change_quest_accessibility(qid, new_accessibility) {
     });
     return false;
 }
+
+function delete_quest(qid, mid) {
+        var postData = new FormData();
+    postData.append("qid", qid);
+    fetch("/admin/delete_quest", {
+        method: "POST",
+        body: postData
+    }).then(response => response.json()).then(function (j) {
+        switch (j["code"]) {
+            case 0:
+                window.location.href = '/manga/'+mid;
+                break;
+            case 1:
+                console.log("权限不足。");
+                return false;
+        }
+    });
+    return false;
+}

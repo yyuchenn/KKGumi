@@ -228,3 +228,21 @@ def change_notes(uid, mid, notes):
     manga.manga_notes = notes
     db.session.commit()
     return 0
+
+
+def delete_chapter(uid, cid):
+    from models import db
+    from services.user_services import get_user_by_uid
+    from services.quest_manager import delete_quest
+    # check user privilege
+    chapter, useless = get_chapter_by_cid(cid)
+    user = get_user_by_uid(uid)
+    if not user.privilege.operate_chapter:
+        return 1
+    # delete quests
+    for quest in chapter.quests:
+        delete_quest(uid, quest.qid)
+    # delete chapter
+    db.session.delete(chapter)
+    db.session.commit()
+    return 0

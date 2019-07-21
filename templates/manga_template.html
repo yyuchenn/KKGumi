@@ -79,8 +79,6 @@
                                 {% endfor %}
                                 {% if user and user.privilege.operate_quest %}
                                     <div class="dropdown-divider"></div>
-                                    <a href="#edit_quest" class="dropdown-item" data-toggle="modal"
-                                       data-target="#edit_quest{{ chapter.cid }}">添加任务</a>
                                     {% if chapter.status == "WORKING" %}
                                         <a href="#" class="dropdown-item"
                                            onclick="return chapter_mark({{ chapter.cid }},'FINISHED')">标记完成</a>
@@ -95,10 +93,17 @@
                                         <a href="#" class="dropdown-item"
                                            onclick="return chapter_mark({{ chapter.cid }},'WORKING')">再开任务</a>
                                     {% endif %}
+                                    <a href="#edit_quest" class="dropdown-item" data-toggle="modal"
+                                       data-target="#edit_quest{{ chapter.cid }}">添加任务</a>
+                                    <a href="delete_confirm" class="dropdown-item" data-toggle="modal"
+                                            data-target="#delete_confirm{{ chapter.cid }}">
+                                        删除章节
+                                    </a>
                                 {% endif %}
                             </div>
                         </div>
                         {% if user and user.privilege.operate_quest %}
+                            <!-- Modal-添加任务 -->
                             <div class="modal fade" id="edit_quest{{ chapter.cid }}" tabindex="-1" role="dialog"
                                  aria-labelledby="QuestModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -119,15 +124,17 @@
                                                            autofocus=""></div>
                                                 <div class="form-inline">
                                                     <label for="quest_type">任务类型：</label>
-                                                    <select class="form-control" name="quest_type" type="text" id="inputType"
-                                                           required="required" autofocus="">
+                                                    <select class="form-control" name="quest_type" type="text"
+                                                            id="inputType"
+                                                            required="required" autofocus="">
                                                         <option value="ARTICLE" selected="selected">文档</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-inline">
                                                     <label for="public_accessibility">公开情况：</label>
-                                                    <select class="form-control" name="public_accessibility" type="text" id="inputAccessibility"
-                                                           required="required" autofocus="">
+                                                    <select class="form-control" name="public_accessibility" type="text"
+                                                            id="inputAccessibility"
+                                                            required="required" autofocus="">
                                                         <option value="1">游客可见</option>
                                                         <option value="0" selected="selected">游客不可见</option>
                                                     </select>
@@ -146,6 +153,28 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- Modal-删除章节 -->
+                            <div class="modal fade" id="delete_confirm{{ chapter.cid }}" tabindex="-1" role="dialog"
+                             aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">ん？</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        删除后可就真的就找不回来了哦。确认删除吗？
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消
+                                        </button>
+                                        <button type="button" class="btn btn-danger" onclick="return delete_chapter({{ chapter.cid }});">确认删除</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         {% endif %}
                     {% endfor %}
 

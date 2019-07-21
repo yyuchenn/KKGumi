@@ -117,3 +117,23 @@ def change_quest_accessibility():
     code = change_quest_accessibility(session.get('uid'), qid, new_accessibility)
     response = {'code': code}
     return JSONEncoder().encode(response)
+
+
+@admin_bp.route('/delete_quest', methods=['POST'])
+@is_login
+def delete_quest():
+    from services.quest_manager import delete_quest
+    qid = request.form["qid"]
+    code = delete_quest(session.get('uid'), qid)
+    response = {'code': code}
+    return JSONEncoder().encode(response)
+
+
+@admin_bp.route('/delete_chapter', methods=['POST'])
+@is_login
+def delete_chapter():
+    from services.content_manager import delete_chapter
+    cid = request.form["cid"]
+    code = delete_chapter(session.get('uid'), cid)
+    response = {'code': code}
+    return JSONEncoder().encode(response)

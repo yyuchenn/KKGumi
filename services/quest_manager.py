@@ -162,3 +162,24 @@ def change_quest_accessibility(uid, qid, new_accessibility):
     quest.public_access = new_accessibility
     db.session.commit()
     return 0
+
+
+def delete_quest(uid, qid):
+    from models import db
+    from services.user_services import get_user_by_uid
+    from services.resource_manager import get_all_resources_under_path, delete_resource
+    # check user privilege
+    quest = get_quest_by_qid(qid)
+    user = get_user_by_uid(uid)
+    if not user.privilege.operate_quest:
+        return 1
+    # delete all resources under the quest file
+    try:
+        resources = get_all_resources_under_path("quest/" + qid)
+        for res in resources:
+            delete_resource(res, uid)
+    except:
+        pass
+    db.session.delete(quest)
+    db.session.commit()
+    return 0
