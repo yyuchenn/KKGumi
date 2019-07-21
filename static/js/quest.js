@@ -7,7 +7,7 @@ function finish_quest(qid) {
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
-                window.location.href = window.location.search;
+                window.location.reload();
                 break;
             case 1:
                 return false;
@@ -25,7 +25,7 @@ function transfer_quest(qid) {
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
-                window.location.href = window.location.search;
+                window.location.reload();
                 break;
             case 1:
                 return false;
@@ -43,7 +43,7 @@ function close_quest(qid) {
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
-                window.location.href = window.location.search;
+                window.location.reload();
                 break;
             case 1:
                 return false;
@@ -61,7 +61,7 @@ function reopen_quest(qid) {
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
-                window.location.href = window.location.search;
+                window.location.reload();
                 break;
             case 1:
                 return false;

@@ -79,3 +79,29 @@ def change_manga_cover():
         abort(500)
     response = {'code': code}
     return JSONEncoder().encode(response)
+
+
+@admin_bp.route('/change_manga_status', methods=['POST'])
+@is_login
+def change_manga_status():
+    from services.content_manager import manga_status
+    status = request.form["new_status"]
+    mid = request.form['mid']
+    try:
+        code = manga_status(session.get('uid'), status, mid)
+    except Exception:
+        code = 500
+        abort(500)
+    response = {'code': code}
+    return JSONEncoder().encode(response)
+
+
+@admin_bp.route('/chapter_mark', methods=['POST'])
+@is_login
+def chapter_mark():
+    from services.content_manager import chapter_mark
+    uid = session.get('uid')
+    cid = request.form.get('cid')
+    mark = request.form.get('mark')
+    code = chapter_mark(uid, cid, mark)
+    return JSONEncoder().encode({'code': code})

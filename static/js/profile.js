@@ -14,7 +14,10 @@ function change_nickname(new_nickname) {
         //console.log(j.toString());
         switch (j["code"]) {
             case 0:
-                window.location.href = window.location.search + "?success=1";
+                //window.location.href = window.location.search + "?success=1";
+                $('#success-pop').attr("style", "");
+                $('.nickname').html(new_nickname);
+                console.log(new_nickname.value);
                 break;
             case 1:
                 return false;

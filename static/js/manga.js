@@ -67,7 +67,6 @@ function create_quest(name, type, cid) {
         method: "POST",
         body: postData
     }).then(response => response.json()).then(function (j) {
-        //console.log(j.toString());
         switch (j["code"]) {
             case 0:
                 window.location.reload();
@@ -83,6 +82,27 @@ function create_quest(name, type, cid) {
         }
     });
     return false;
+}
+
+
+function change_manga_title(new_title, mid) {
+    new_title = new_title.value;
+    postData = new FormData();
+    postData.append("new_title", new_title);
+    postData.append("mid", mid);
+    fetch("/admin/change_manga_title", {
+        method: "POST",
+        body: postData
+    }).then(response => response.json()).then(function (j) {
+        switch (j["code"]) {
+            case 0:
+                window.location.reload();
+                break;
+            case 1:
+                console.log("权限不足。");
+                return false;
+        }
+    });
 }
 
 
@@ -111,5 +131,95 @@ function change_manga_cover(cover, mid) {
             }
         });
     };
+    return false;
+}
+
+function change_manga_status(new_title, mid) {
+    new_title = new_title.value;
+    postData = new FormData();
+    postData.append("new_status", new_title);
+    postData.append("mid", mid);
+    fetch("/admin/change_manga_status", {
+        method: "POST",
+        body: postData
+    }).then(response => response.json()).then(function (j) {
+        switch (j["code"]) {
+            case 0:
+                window.location.reload();
+                break;
+            case 1:
+                console.log("权限不足。");
+                return false;
+            case 2:
+                console.log("错误的漫画编码。");
+                return false;
+        }
+    });
+}
+
+function chapter_mark(cid, mark) {
+    postData = new FormData();
+    postData.append("cid", cid);
+    postData.append("mark", mark);
+    fetch('/admin/chapter_mark', {
+        method: "POST",
+        body: postData
+    }).then(response => response.json()).then(function (j) {
+        switch (j["code"]) {
+            case 0:
+                window.location.reload();
+                break;
+            case 1:
+                console.log("权限不足。");
+                return false;
+        }
+    });
+    return false;
+}
+
+
+function load_editor() {
+    $('.summernote').summernote({
+        lang: 'zh-CN',
+        airMode: true,
+        placeholder: '点按这里开始键入内容',
+        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'],
+    });
+    $('#editor_edit').attr('style', 'display: none;');
+    $('#editor_cancel').attr('style', '');
+    $('#editor_save').attr('style', '');
+    return false;
+}
+
+function destry_editor() {
+    $('.summernote').summernote('destroy');
+    $('#editor_edit').attr('style', '');
+    $('#editor_cancel').attr('style', 'display: none;');
+    $('#editor_save').attr('style', 'display: none;');
+    return false;
+}
+
+function save_notes(mid) {
+    postData = new FormData();
+    var notes = $('.summernote').summernote('code');
+    postData.append("notes", notes);
+    postData.append("mid", mid);
+    fetch("/guild/change_notes", {
+        method: "POST",
+        body: postData
+    }).then(response => response.json()).then(function (j) {
+        switch (j["code"]) {
+            case 0:
+                window.location.reload();
+                break;
+            case 1:
+                console.log("权限不足。");
+                return false;
+            case 2:
+                console.log("错误的漫画编码。");
+                return false;
+        }
+    });
+    destry_editor();
     return false;
 }

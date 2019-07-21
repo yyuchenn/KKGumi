@@ -63,13 +63,12 @@ def create_quest(uid, name, quest_type, cid):
 def manga_title(uid, new_title, mid):
     from models import db
     from models.user import User
-    from models.manga import Manga
     # check user privilege
     user = User.query.get(uid)
     if not user.privilege.operate_quest:
         return 1
     # check manga existence
-    manga = Manga.query.get(mid)
+    manga = get_manga_by_mid(mid)
     if manga is None:
         return 2
     # change title
@@ -82,19 +81,37 @@ def manga_title(uid, new_title, mid):
 def manga_cover(uid, new_cover, mid):
     from models import db
     from models.user import User
-    from models.manga import Manga
     # check user privilege
     user = User.query.get(uid)
     if not user.privilege.operate_quest:
         return 1
     # check manga existence
-    manga = Manga.query.get(mid)
+    manga = get_manga_by_mid(mid)
     if manga is None:
         return 2
     # change title
     manga.manga_cover = new_cover
     db.session.commit()
     update_manga(manga)
+    return 0
+
+
+def manga_status(uid, new_status, mid):
+    from models import db
+    from models.user import User
+    # check user privilege
+    user = User.query.get(uid)
+    if not user.privilege.operate_quest:
+        return 1
+    # check manga existence
+    manga = get_manga_by_mid(mid)
+    if manga is None:
+        return 2
+    # check status validity
+    if new_status not in ["WORKING", "HALT", "FINISHED"]:
+        return 3
+    manga.status = new_status
+    db.session.commit()
     return 0
 
 
@@ -159,3 +176,55 @@ def update_quest(quest):
     quest.last_update = db.func.now()
     db.session.commit()
     update_chapter(quest.chapter)
+
+
+def chapter_mark(uid, cid, mark):
+    from services.user_services import get_user_by_uid
+    from models import db
+    # check user privilege
+    if get_user_by_uid(uid).privilege.operate_chapter is not True:
+        return 1
+    chapter, useless = get_chapter_by_cid(cid)
+    if chapter.status == "FINISHED" and mark == "WORKING":
+        chapter.status = "WORKING"
+    if chapter.status == "WORKING" and mark == "FINISHED":
+        chapter.status = "FINISHED"
+    if chapter.status == "WORKING" and mark == "HALT":
+        chapter.status = "HALT"
+        # halt all non-finished quests
+        from services.quest_manager import close_quest
+        for quest in chapter.quests:
+            if quest.status != "FINISHED":
+                try:
+                    code = close_quest(uid, quest.qid)
+                except:
+                    pass
+    if chapter.status == "HALT" and mark == "WORKING":
+        chapter.status = "WORKING"
+        # reopen all non-finished quests
+        from services.quest_manager import reopen_quest
+        for quest in chapter.quests:
+            if quest.status != "FINISHED":
+                try:
+                    code = reopen_quest(uid, quest.qid)
+                except:
+                    pass
+    db.session.commit()
+    return 0
+
+
+def change_notes(uid, mid, notes):
+    from models import db
+    from models.user import User
+    # check user privilege
+    user = User.query.get(uid)
+    if not user.privilege.accept_quest:
+        return 1
+    # check manga existence
+    manga = get_manga_by_mid(mid)
+    if manga is None:
+        return 2
+    # change notes
+    manga.manga_notes = notes
+    db.session.commit()
+    return 0

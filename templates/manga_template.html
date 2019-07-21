@@ -37,10 +37,10 @@
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-muted">章节</span>
                     <span>
-                    {% if statistics.count_on_chapters(manga, 'WORKING') > 0 %}
-                        <span class="badge badge-primary badge-pill">{{ statistics.count_on_chapters(manga, 'WORKING') }}</span>{% endif %}
-                        {% if statistics.count_on_quests_in_manga(manga, 'HIRING') > 0 %}
-                            <span class="badge badge-danger badge-pill">{{ statistics.count_on_quests_in_manga(manga, 'HIRING') }}</span>{% endif %}
+                    {% if statistics.count_on_quests_in_manga(manga, 'HIRING') > 0 %}
+                        <span class="badge badge-danger badge-pill">{{ statistics.count_on_quests_in_manga(manga, 'HIRING') }}</span>{% endif %}
+                        {% if statistics.count_on_chapters(manga, 'WORKING') > 0 %}
+                            <span class="badge badge-primary badge-pill">{{ statistics.count_on_chapters(manga, 'WORKING') }}</span>{% endif %}
                         {% if statistics.count_on_chapters(manga, 'FINISHED') > 0 %}
                             <span class="badge badge-success badge-pill">{{ statistics.count_on_chapters(manga, 'FINISHED') }}</span>
                         {% endif %}
@@ -62,13 +62,39 @@
                             </button>
                             <div class="dropdown-menu">
                                 {% for quest in chapter.quests %}
-                                    <a class="dropdown-item" href="/quest/{{ quest.qid }}">{{ quest.quest_name }}</a>
+                                    <a class="dropdown-item" href="/quest/{{ quest.qid }}">
+                                        <span class="d-flex justify-content-between align-items-center">
+                                            <span>{{ quest.quest_name }}</span>
+                                            <span class="text-muted">
+                                                {% if quest.status == "HIRING" %}
+                                                    <span class="badge badge-danger badge-pill">招</span>
+                                                {% elif quest.status == "WORKING" %}
+                                                    <span class="badge badge-primary badge-pill">更</span>
+                                                {% elif quest.status == "CLOSED" %}
+                                                    <span class="badge badge-warning badge-pill">停</span>
+                                                {% endif %}
+                                            </span>
+                                        </span>
+                                    </a>
                                 {% endfor %}
                                 {% if user and user.privilege.operate_quest %}
                                     <div class="dropdown-divider"></div>
                                     <a href="#edit_quest" class="dropdown-item" data-toggle="modal"
                                        data-target="#edit_quest{{ chapter.cid }}">添加任务</a>
-
+                                    {% if chapter.status == "WORKING" %}
+                                        <a href="#" class="dropdown-item"
+                                           onclick="return chapter_mark({{ chapter.cid }},'FINISHED')">标记完成</a>
+                                        <a href="#" class="dropdown-item"
+                                           onclick="return chapter_mark({{ chapter.cid }},'HALT')">终止任务</a>
+                                    {% endif %}
+                                    {% if chapter.status == "HALT" %}
+                                        <a href="#" class="dropdown-item"
+                                           onclick="return chapter_mark({{ chapter.cid }},'WORKING')">继续任务</a>
+                                    {% endif %}
+                                    {% if chapter.status == "FINISHED" %}
+                                        <a href="#" class="dropdown-item"
+                                           onclick="return chapter_mark({{ chapter.cid }},'WORKING')">再开任务</a>
+                                    {% endif %}
                                 {% endif %}
                             </div>
                         </div>
@@ -180,7 +206,7 @@
                                     <form>
                                         <div class="form-inline">
                                             <label for="new_title">标题：</label>
-                                            <input name="new_title" type="text" id="inputTitle" class="form-inline"
+                                            <input name="new_title" type="text" id="inputTitle" class="form-control"
                                                    required="required" value="{{ manga.manga_name }}"
                                                    autofocus="">
                                             <button type="button" class="btn btn-primary"
@@ -191,13 +217,36 @@
                                     <form>
                                         <div class="form-inline">
                                             <label for="manga_cover">封面：</label>
-                                            <input name="manga_cover" type="file" id="inputCover" class="form-inline"
+                                            <input name="manga_cover" type="file" id="inputCover" class="form-control"
                                                    required="required" accept="image/png,image/gif,image/jpeg">
                                             <button type="button" class="btn btn-primary"
                                                     onclick="return change_manga_cover(manga_cover, {{ manga.mid }});">
                                                 修改
                                             </button>
                                         </div>
+                                    </form>
+                                    <form>
+                                        <div class="form-inline">
+                                            <label for="status">状态：</label>
+                                            <select name="manga_status" class="form-control" id="inputStatus">
+                                                <option value="WORKING"
+                                                        {% if manga.status == 'WORKING' %}selected="selected"{% endif %}>
+                                                    进行中
+                                                </option>
+                                                <option value="HALT"
+                                                        {% if manga.status == 'HALT' %}selected="selected"{% endif %}>坑
+                                                </option>
+                                                <option value="FINISHED"
+                                                        {% if manga.status == 'FINISHED' %}selected="selected"{% endif %}>
+                                                    已完结
+                                                </option>
+                                            </select>
+                                            <button type="button" class="btn btn-primary"
+                                                    onclick="return change_manga_status(manga_status, {{ manga.mid }});">
+                                                修改
+                                            </button>
+                                        </div>
+
                                     </form>
                                 </div>
                                 <div class="modal-footer">
@@ -218,8 +267,23 @@
                     {% elif manga.status == 'FINISHED' %}
                         <span class="badge badge-success badge-pill">已完结</span>{% else %}{{ manga.status }}{% endif %}
                 </div>
-                <div class="text-body"><b>備考: </b>
-                    <p>挺好的。</p></div>
+                <div class="text-body">
+                    <span class="justify-content-between"><b>備考: </b>
+                        {% if user and user.privilege.accept_quest %}
+                            <link href="/static/summernote/summernote-bs4.css" rel="stylesheet">
+                            <script src="/static/summernote/summernote-bs4.js"></script>
+                            <script src="/static/summernote/summernote-zh-CN.min.js"></script>
+                            <span>
+                        <a id="editor_edit" type="button" onclick="return load_editor();">编辑</a>
+                        <a id="editor_cancel" type="button" style="display: none;"
+                           onclick="return destry_editor();">取消</a>
+                        <a id="editor_save" type="button" style="display: none;"
+                           onclick="return save_notes({{ manga.mid }});">保存</a>
+                        </span>
+                        {% endif %}
+                    </span>
+                    <div class="summernote">{% if manga.manga_notes %}{{ manga.manga_notes|safe }}{% endif %}</div>
+                </div>
             </div>
 
         </div>
