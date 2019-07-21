@@ -105,7 +105,7 @@
                             <b>承接人：</b><a href="/member/{{ quest.accept_uid }}">{{ quest.accept_by.nickname }}</a>
                         </div>
                         <div class="text-body">
-                            <b>承接时间：</b><span id="accept_on"><script>setLocalTime_exact("accept_on", {{ quest.create_on.timestamp() }})</script></span>
+                            <b>承接时间：</b><span id="accept_on"><script>setLocalTime_exact("accept_on", {{ quest.accept_on.timestamp() }})</script></span>
                         </div>
                         {% if quest.status == "WORKING" %}
                             <div class="text-body">

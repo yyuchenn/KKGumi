@@ -78,3 +78,14 @@ def transfer_quest():
     qid = request.form.get('qid')
     code = transfer_quest(uid, qid)
     return JSONEncoder().encode({'code': code})
+
+
+@guild_bp.route('/change_notes', methods=['POST'])
+@is_login
+def change_notes():
+    from services.content_manager import change_notes
+    uid = session.get('uid')
+    notes = request.form.get('notes')
+    mid = request.form.get('mid')
+    code = change_notes(uid, mid, notes)
+    return JSONEncoder().encode({'code': code})
