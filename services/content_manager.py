@@ -35,7 +35,7 @@ def create_chapter(uid, name, mid):
     update_chapter(new_chapter)
     # create two default quests
     quest1_code = create_quest(uid, "翻译", "ARTICLE", False, new_chapter.cid)
-    quest2_code = create_quest(uid, "嵌字", "IMAGES", False, new_chapter.cid)
+    quest2_code = create_quest(uid, "嵌字", "ARTICLE", False, new_chapter.cid)
     return 0
 
 

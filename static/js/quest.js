@@ -95,7 +95,7 @@ function change_quest_accessibility(qid, new_accessibility) {
 }
 
 function delete_quest(qid, mid) {
-        var postData = new FormData();
+    var postData = new FormData();
     postData.append("qid", qid);
     fetch("/admin/delete_quest", {
         method: "POST",
@@ -107,6 +107,33 @@ function delete_quest(qid, mid) {
                 break;
             case 1:
                 console.log("权限不足。");
+                return false;
+        }
+    });
+    return false;
+}
+
+function assign_quest(assign_to, qid) {
+    var postData = new FormData();
+    accept_uid = assign_to.value;
+    postData.append("accept_uid", accept_uid);
+    postData.append("qid", qid);
+    fetch("/guild/accept_quest", {
+        method: "POST",
+        body: postData
+    }).then(response => response.json()).then(function (j) {
+        switch (j["code"]) {
+            case 0:
+                window.location.reload();
+                break;
+            case 1:
+                console.log("您的权限不足。");
+                return false;
+            case 2:
+                console.log("被分配的用户权限不足。");
+                return false;
+            case 3:
+                console.log("任务不可用。");
                 return false;
         }
     });

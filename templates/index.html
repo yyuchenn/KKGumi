@@ -78,10 +78,6 @@
                             </div>
                             <div>
                                 <span class="text-muted"><button role="button" class="btn-primary" onclick="return accept_quest({{ user.uid }}, {{ quest.qid }});">承接</button></span>
-                                {% if user.privilege.operate_quest %}
-                                    <span class="text-muted"><button role="button"
-                                                                     class="btn-secondary">分配</button></span>
-                                {% endif %}
                             </div>
                         </li>
                     {% endfor %}

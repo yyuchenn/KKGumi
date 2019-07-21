@@ -58,7 +58,46 @@
                         {% endif %}
                         {% if user.privilege.operate_quest %}
                             {% if quest.status == "HIRING" %}
-                                <button type="button" class="btn btn-secondary">分配</button>
+                                <button type="button" class="btn btn-secondary" data-toggle="modal"
+                                        data-target="#assign_quest{{ quest.qid }}">
+                                    分配
+                                </button>
+                                <div class="modal fade" id="assign_quest{{ quest.qid }}" tabindex="-1" role="dialog"
+                                     aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">苟利国家生死以，岂因祸福避趋之。</h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                        aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form>
+                                                <div class="modal-body">
+                                                        <label for="assign_to">将这个任务分配给：</label>
+                                                        <select class="form-control" name="assign_to"
+                                                                type="text"
+                                                                id="inputAccessibility"
+                                                                required="required" autofocus="">
+                                                            {% for member in get_users() %}
+                                                            <option value="{{ member.uid }}">{{ member.nickname }}@{{ member.username }}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                            data-dismiss="modal">取消
+                                                    </button>
+                                                    <button type="button" class="btn btn-primary"
+                                                            onclick="return assign_quest(assign_to, {{ quest.qid }});">
+                                                        分配
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                                 <button type="button" class="btn btn-warning"
                                         onclick="return close_quest({{ quest.qid }});">关闭任务
                                 </button>
@@ -138,7 +177,10 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">取消
                                         </button>
-                                        <button type="button" class="btn btn-danger" onclick="return delete_quest({{ quest.qid }}, {{ quest.chapter.manga.mid }});">确认删除</button>
+                                        <button type="button" class="btn btn-danger"
+                                                onclick="return delete_quest({{ quest.qid }}, {{ quest.chapter.manga.mid }});">
+                                            确认删除
+                                        </button>
                                     </div>
                                 </div>
                             </div>
