@@ -100,6 +100,17 @@ def change_nickname_route():
     return JSONEncoder().encode(response)
 
 
+@user_bp.route('/dashboard/change_introduction', methods=['POST'])
+@is_login
+def change_introduction_route():
+    from services.user_services import change_introduction
+    uid = session.get('uid')
+    new_introduction = request.form.get('new_introduction')
+    code = change_introduction(uid, new_introduction)
+    response = {'code': code}
+    return JSONEncoder().encode(response)
+
+
 @user_bp.route('/dashboard/change_password', methods=['POST'])
 @is_login
 def change_password_route():

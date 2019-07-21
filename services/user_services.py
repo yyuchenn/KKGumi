@@ -100,6 +100,19 @@ def change_nickname(uid, new_nickname):
     return 0
 
 
+def change_introduction(uid, new_introduction):
+    from models.user import User
+    from models import db
+    user = User.query.get(uid)
+    # check nickname validity
+    if new_introduction is None or len(new_introduction) == 0 or len(new_introduction) > 512:
+        return 1
+    # change nickname
+    user.introduction = new_introduction
+    db.session.commit()
+    return 0
+
+
 def change_password(uid, old_password, new_password):
     '''
     :param uid: user id

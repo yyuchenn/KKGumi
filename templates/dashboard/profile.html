@@ -29,6 +29,14 @@
                         </button>
                     </form>
                 </li>
+                <li class="list-group-item d-flex">
+                    <form class="form-inline">
+                        <label class="col-form-label">一句话：</label>
+                        <input type="text" name="introduction" class="form-control" value="{{ user.introduction }}">
+                        <button class="btn btn-primary" type="submit" onclick="return change_introduction(introduction);">修改
+                        </button>
+                    </form>
+                </li>
                 <li class="list-group-item d-flex form-inline">
                     <div>密码：</div>
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#change_pwd">修改密码

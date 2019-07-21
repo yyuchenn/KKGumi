@@ -46,7 +46,10 @@
                             {{ member.nickname }}</a><br>
                         <small class="text-muted">@{{ member.username }}</small>
                     </div>
-                    <span class="text-muted">{{ member.privilege.privilege_name }}</span>
+                    <div align="right">
+                        <div class="text-muted">{{ member.privilege.privilege_name }}</div>
+                        <small class="text-muted">{% if member.introduction %}{{ member.introduction }}{% endif %}</small>
+                    </div>
                 </li>
             {% endfor %}
         </ul>

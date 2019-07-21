@@ -11,13 +11,30 @@ function change_nickname(new_nickname) {
         method: "POST",
         body: postData
     }).then(response => response.json()).then(function (j) {
-        //console.log(j.toString());
         switch (j["code"]) {
             case 0:
-                //window.location.href = window.location.search + "?success=1";
                 $('#success-pop').attr("style", "");
                 $('.nickname').html(new_nickname);
                 console.log(new_nickname.value);
+                break;
+            case 1:
+                return false;
+        }
+    });
+    return false;
+}
+
+function change_introduction(new_introduction) {
+    new_introduction = new_introduction.value;
+    var postData = new FormData();
+    postData.append("new_introduction", new_introduction);
+    fetch('/dashboard/change_introduction', {
+        method: "POST",
+        body: postData
+    }).then(response => response.json()).then(function (j) {
+        switch (j["code"]) {
+            case 0:
+                $('#success-pop').attr("style", "");
                 break;
             case 1:
                 return false;
