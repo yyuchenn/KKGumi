@@ -105,3 +105,14 @@ def chapter_mark():
     mark = request.form.get('mark')
     code = chapter_mark(uid, cid, mark)
     return JSONEncoder().encode({'code': code})
+
+
+@admin_bp.route('/change_quest_accessibility', methods=['POST'])
+@is_login
+def change_quest_accessibility():
+    from services.quest_manager import change_quest_accessibility
+    qid = request.form["qid"]
+    new_accessibility = int(request.form["new_accessibility"])
+    code = change_quest_accessibility(session.get('uid'), qid, new_accessibility)
+    response = {'code': code}
+    return JSONEncoder().encode(response)

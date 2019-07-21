@@ -66,7 +66,8 @@ def update_article(uid, qid, article):
 def register_article(uid, quest, filename):
     from services.resource_manager import create_resource
     from models import db
-    rid = create_resource(filename, uid, "quest/" + str(quest.qid)).rid
+    public_access = quest.public_access
+    rid = create_resource(filename, uid, "quest/" + str(quest.qid), public_access).rid
     quest.resource_rid = rid
     db.session.commit()
 
@@ -74,9 +75,10 @@ def register_article(uid, quest, filename):
 def register_content(uid, quest, files):
     from services.resource_manager import upload_resource, get_resource_url
     from models import db
+    public_access = quest.public_access
     urls = {}
     for filetag in files:
-        resource = upload_resource(files[filetag], uid, "quest/" + str(quest.qid))
+        resource = upload_resource(files[filetag], uid, "quest/" + str(quest.qid), public_access)
         db.session.commit()
         urls[filetag] = get_resource_url(resource)
     return urls
@@ -137,4 +139,26 @@ def transfer_quest(uid, qid):
     db.session.commit()
     if res is not None:
         delete_resource(res, res.uploader_uid)
+    return 0
+
+
+def change_quest_accessibility(uid, qid, new_accessibility):
+    from models import db
+    from services.user_services import get_user_by_uid
+    from services.resource_manager import get_all_resources_under_path, change_resource_accessibility
+    # check user privilege
+    quest = get_quest_by_qid(qid)
+    user = get_user_by_uid(uid)
+    if not user.privilege.operate_quest:
+        return 1
+    # check quest status
+    if quest.status != "FINISHED" and quest.status != "CLOSED":
+        return 2
+    # change resources accessibility
+    resources = get_all_resources_under_path('quest/' + qid)
+    for res in resources:
+        change_resource_accessibility(res, uid, new_accessibility)
+    # change quest accessibility
+    quest.public_access = new_accessibility
+    db.session.commit()
     return 0

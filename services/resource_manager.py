@@ -1,7 +1,7 @@
 from conf import RESOURCE_FOLDER
 
 
-def upload_resource(file, uid, filepath):
+def upload_resource(file, uid, filepath, public_access):
     from models.resource import Resource
     from services.user_services import get_user_by_uid
     from models import db
@@ -25,13 +25,13 @@ def upload_resource(file, uid, filepath):
     # save file
     file.save(path.join(RESOURCE_FOLDER + filepath, filename))
     # update database
-    new_resource = Resource(resource_name=filename, resource_path=filepath, uploader_uid=uid)
+    new_resource = Resource(resource_name=filename, resource_path=filepath, uploader_uid=uid, public_access=public_access)
     db.session.add(new_resource)
     db.session.commit()
     return new_resource
 
 
-def create_resource(filename, uid, filepath):
+def create_resource(filename, uid, filepath, public_access):
     from models.resource import Resource
     from services.user_services import get_user_by_uid
     from models import db
@@ -44,7 +44,7 @@ def create_resource(filename, uid, filepath):
     if not path.exists(RESOURCE_FOLDER + filepath):
         makedirs(RESOURCE_FOLDER + filepath)
     new_file = open(path.join(RESOURCE_FOLDER + filepath, filename), "w")
-    new_resource = Resource(resource_name=filename, resource_path=filepath, uploader_uid=uid)
+    new_resource = Resource(resource_name=filename, resource_path=filepath, uploader_uid=uid, public_access=public_access)
     db.session.add(new_resource)
     db.session.commit()
     return new_resource
@@ -66,7 +66,7 @@ def delete_resource(res, uid):
     from services.user_services import get_user_by_uid
     from os import path, remove
     # check user privilege
-    if res.uploader_uid != uid and get_user_by_uid(uid).privilege.delete_file is False:
+    if res.uploader_uid != uid and get_user_by_uid(uid).privilege.operate_file is False:
         return 1
     filepath = path.abspath(RESOURCE_FOLDER + res.resource_path + "/" + res.resource_name)
     remove(filepath)
@@ -112,3 +112,20 @@ def get_resource_by_uri(url):
         return res
     except:
         return None
+
+
+def get_all_resources_under_path(path):
+    from models.resource import Resource
+    resources = Resource.query.filter_by(resource_path=path)
+    return resources
+
+
+def change_resource_accessibility(res, uid, new_accessibility):
+    from services.user_services import get_user_by_uid
+    from models import db
+    user = get_user_by_uid(uid)
+    # check user privilege
+    if user.privilege.operate_file is not True:
+        return 1
+    res.public_access = new_accessibility
+    db.session.commit()
