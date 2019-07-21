@@ -41,9 +41,10 @@ def add_quest():
     from services.content_manager import create_quest
     name = request.form["name"]
     quest_type = request.form["quest_type"]
+    public_accessibility = int(request.form["public_accessibility"])
     cid = request.form["cid"]
     try:
-        code = create_quest(session.get('uid'), name, quest_type, cid)
+        code = create_quest(session.get('uid'), name, quest_type, public_accessibility, cid)
     except Exception:
         code = 500
         abort(500)

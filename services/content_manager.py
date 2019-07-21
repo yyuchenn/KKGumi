@@ -34,12 +34,12 @@ def create_chapter(uid, name, mid):
     db.session.commit()
     update_chapter(new_chapter)
     # create two default quests
-    quest1_code = create_quest(uid, "翻译", "ARTICLE", new_chapter.cid)
-    quest2_code = create_quest(uid, "嵌字", "IMAGES", new_chapter.cid)
+    quest1_code = create_quest(uid, "翻译", "ARTICLE", False, new_chapter.cid)
+    quest2_code = create_quest(uid, "嵌字", "IMAGES", False, new_chapter.cid)
     return 0
 
 
-def create_quest(uid, name, quest_type, cid):
+def create_quest(uid, name, quest_type, public_accessibility, cid):
     from models import db
     from models.user import User
     from models.chapter import Chapter
@@ -53,7 +53,7 @@ def create_quest(uid, name, quest_type, cid):
     if chapter is None:
         return 2
     # create quest
-    new_quest = Quest(quest_name=name, quest_type=quest_type, cid=cid, create_uid=uid)
+    new_quest = Quest(quest_name=name, quest_type=quest_type, cid=cid, create_uid=uid, public_access=public_accessibility)
     db.session.add(new_quest)
     db.session.commit()
     update_quest(new_quest)

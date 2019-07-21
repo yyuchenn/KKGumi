@@ -56,12 +56,14 @@ function create_chapter(title, mid) {
 }
 
 
-function create_quest(name, type, cid) {
+function create_quest(name, type, accessibility, cid) {
     name = name.value;
     type = type.value;
+    accessibility = accessibility.value;
     postData = new FormData();
     postData.append("name", name);
     postData.append("quest_type", type);
+    postData.append("public_accessibility", accessibility);
     postData.append("cid", cid);
     fetch("/admin/add_quest", {
         method: "POST",

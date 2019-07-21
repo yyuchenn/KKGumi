@@ -119,17 +119,26 @@
                                                            autofocus=""></div>
                                                 <div class="form-inline">
                                                     <label for="quest_type">任务类型：</label>
-                                                    <input name="quest_type" type="text" id="inputTitle"
-                                                           class="form-control"
-                                                           required="required"
-                                                           autofocus=""></div>
+                                                    <select class="form-control" name="quest_type" type="text" id="inputType"
+                                                           required="required" autofocus="">
+                                                        <option value="ARTICLE" selected="selected">文档</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-inline">
+                                                    <label for="public_accessibility">公开情况：</label>
+                                                    <select class="form-control" name="public_accessibility" type="text" id="inputAccessibility"
+                                                           required="required" autofocus="">
+                                                        <option value="1">游客可见</option>
+                                                        <option value="0" selected="selected">游客不可见</option>
+                                                    </select>
+                                                </div>
                                                 <div class="errorMessage"></div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">取消
                                                 </button>
                                                 <button type="button" class="btn btn-primary"
-                                                        onclick="return create_quest(quest_title, quest_type, {{ chapter.cid }});">
+                                                        onclick="return create_quest(quest_title, quest_type, public_accessibility, {{ chapter.cid }});">
                                                     完成
                                                 </button>
                                             </div>
