@@ -14,15 +14,43 @@ def resource_distribute(filepath):
     return send_from_directory(dirname, basename)
 
 
+@resource_bp.route('/pan/')
+@is_login
+def pan_index():
+    from services.user_services import get_user_by_uid
+    from services.file_manager import folder_ls
+    from os.path import join
+    uid = session.get('uid')
+    try:
+        files_res, folders = folder_ls('')
+        return render_template('pan.html', user=get_user_by_uid(uid), files_res=files_res, folders=folders, cur='', join=join)
+    except FileNotFoundError:
+        abort(404)
+
+
 @resource_bp.route('/pan/<path:path>')
-def pan_folder(path):
-    return "绝赞开发中~"
+@is_login
+def pan_dir(path):
+    from services.user_services import get_user_by_uid
+    from services.file_manager import folder_ls
+    from os.path import join
+    uid = session.get('uid')
+    try:
+        files_res, folders = folder_ls(path)
+        return render_template('pan.html', user=get_user_by_uid(uid), files_res=files_res, folders=folders, cur=path, join=join)
+    except FileNotFoundError:
+        abort(404)
 
 
 @resource_bp.route('/upload_file', methods=['POST'])
 @is_login
 def upload_file():
-    pass
+    from services.file_manager import upload_file
+    uid = session.get('uid')
+    folder = request.form.get('folder')
+    url = upload_file(uid, folder, request.files['file'])
+    response = {'code': 0, 'url': url}
+    return JSONEncoder().encode(response)
 
 
 @resource_bp.route('/delete_file', methods=['POST'])

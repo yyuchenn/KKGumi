@@ -13,7 +13,7 @@ def is_login(func):
         if session.get('uid') is not None and session.get('uid') != -1:  # uid == -1 for no login
             return func(*args, **kwargs)
         else:
-            return redirect('/login?callback=' + url_for('.' + func.__name__))
+            return redirect('/login?callback=' + url_for('.' + func.__name__, **kwargs))
     return check_login
 
 

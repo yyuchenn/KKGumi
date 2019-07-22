@@ -1,0 +1,125 @@
+{% extends 'navbar.html' %}
+{% block title %}文件 - 九九组{% endblock %}
+{% block head %}
+    <style>
+        h1 {
+            color: #6c757d;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+
+            .jumbotron {
+                padding-top: 6rem;
+                padding-bottom: 6rem;
+            }
+        }
+
+        .jumbotron {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            margin-bottom: 0;
+            background-color: #fff;
+        }
+
+        .jumbotron p:last-child {
+            margin-bottom: 0;
+        }
+
+        .jumbotron-heading {
+            font-weight: 300;
+        }
+
+        .jumbotron .container {
+            max-width: 40rem;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/css/dropzone.css">
+    <script src="/static/js/dropzone.js"></script>
+    <script src="/static/js/files.js"></script>
+    <script src="/static/js/time_util.js"></script>
+    <script>
+    </script>
+{% endblock %}
+{% block body %}
+    <div class="container">
+        <section class="jumbotron text-center">
+            <p class="container">
+            <h1 class="jumbotron-heading">文件</h1>
+
+            <p class="lead text-muted">
+                <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#uploader"
+                        onclick="return render_uploader('{{ cur }}')">上传文件
+                </button>
+                <button type="button" class="btn btn-primary">创建文件夹</button>
+            <div class="collapse" id="uploader">
+                <div class="card-body">
+                    <form class="dropzone" id="dropzone">
+                    </form>
+                </div>
+            </div>
+            </p>
+        </section>
+
+        <ul class="list-group mb-3">
+            {% for folder in folders %}
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div>
+                        <a class="my-0 h6" href="{{ join('/pan', cur, folder) }}">
+                            {{ folder }}</a><br>
+                        <small class="text-muted"></small>
+                    </div>
+                    <div align="right">
+                        <div class="text-muted"></div>
+                        <small class="text-muted"></small>
+                    </div>
+                </li>
+            {% endfor %}
+
+            {% for res in files_res %}
+                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                    <div>
+                        <a class="my-0 h6" href="{{ join('/resource',res.resource_path,res.resource_name) }}">
+                            {{ res.resource_name }}</a><br>
+                        <small class="text-muted">{{ res.uploader.nickname }}</small>
+                    </div>
+                    <div align="right">
+                        <div class="text-muted" id="create_on{{ res.rid }}">
+                            <script>setLocalTime_exact("create_on{{ res.rid }}", {{ res.create_on.timestamp() }});</script>
+                        </div>
+                        <small class="text-muted">
+                            <button type="button" data-toggle="modal"
+                                    data-target="#delete{{ res.rid }}" class="btn-group-sm btn-danger">删除
+                            </button>
+                        </small>
+                    </div>
+                        <div class="modal fade" id="delete{{ res.rid }}" tabindex="-1" role="dialog"
+                             aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">ん？</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        真的要删除嘛？
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                        <button type="button" class="btn btn-danger"
+                                                onclick="return delete_file('{{ join('/resource',res.resource_path,res.resource_name) }}');">
+                                            删除
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

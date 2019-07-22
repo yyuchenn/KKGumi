@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session
+from flask import Blueprint, render_template, session, redirect
 from .user import is_login
 
 home_bp = Blueprint('home', __name__, static_folder='../static', template_folder='../templates', url_prefix='/')
@@ -19,8 +19,7 @@ def about():
     return render_template('about.html', user=get_user_by_uid(session.get('uid')))
 
 
-@home_bp.route('/files')
+@home_bp.route('/pan')
 @is_login
-def files():
-    from services.user_services import get_user_by_uid
-    return render_template('files.html', user=get_user_by_uid(session.get('uid')))
+def pan():
+    return redirect('/pan/')

@@ -8,6 +8,7 @@ def upload_resource(file, uid, filepath, public_access):
     from os import path
     from os import makedirs
     secure_filename(file.filename)
+    secure_filepath(filepath)
     # check user privilege
     if get_user_by_uid(uid).privilege.upload_file is False:
         return None
@@ -79,6 +80,12 @@ def secure_filename(filename):
     from re import search
     assert search("^\.", filename) is None
     assert search("/", filename) is None
+
+
+def secure_filepath(filepath):
+    from os import path
+    path = path.normpath(filepath)
+    assert path[:3] != '../'
 
 
 def retrieve_info(filepath):

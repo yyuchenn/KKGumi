@@ -96,7 +96,7 @@
                             <a class="my-0 h6" href="/quest/{{ quest.qid }}">
                                 {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
                             <small class="text-muted">担当: <a
-                                    href="/member/{{ quest.accept_uid }}">{{ quest.accept_by.username }}</a></small>
+                                    href="/member/{{ quest.accept_uid }}">{{ quest.accept_by.nickname }}</a></small>
                         </div>
                         <span class="text-muted" id="qid{{ quest.qid }}"
                               style="font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', monospace"><script>setTimer("qid{{ quest.qid }}", {{ quest.accept_on.timestamp() }})</script></span>
