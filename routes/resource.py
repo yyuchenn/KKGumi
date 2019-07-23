@@ -40,6 +40,8 @@ def pan_dir(path):
         return render_template('pan.html', user=get_user_by_uid(uid), files_res=files_res, folders=folders, cur=path, join=join)
     except FileNotFoundError:
         abort(404)
+    except NotADirectoryError:
+        abort(404)
 
 
 @resource_bp.route('/upload_file', methods=['POST'])
@@ -59,7 +61,18 @@ def delete_file():
     from services.resource_manager import delete_resource, get_resource_by_uri
     uid = session.get('uid')
     uri = request.form.get('uri')
-    print(uri)
     code = delete_resource(get_resource_by_uri(uri), uid)
+    response = {'code': code}
+    return JSONEncoder().encode(response)
+
+
+@resource_bp.route('/new_dir', methods=['POST'])
+@is_login
+def new_dir():
+    from services.resource_manager import new_dir
+    uid = session.get('uid')
+    folder = request.form.get('folder')
+    dir_name = request.form.get('dir_name')
+    code = new_dir(uid, folder, dir_name)
     response = {'code': code}
     return JSONEncoder().encode(response)

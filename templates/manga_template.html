@@ -312,11 +312,11 @@
                             <script src="/static/summernote/summernote-bs4.js"></script>
                             <script src="/static/summernote/summernote-zh-CN.min.js"></script>
                             <span>
-                        <a id="editor_edit" type="button" onclick="return load_editor();">编辑</a>
-                        <a id="editor_cancel" type="button" style="display: none;"
-                           onclick="return destry_editor();">取消</a>
-                        <a id="editor_save" type="button" style="display: none;"
-                           onclick="return save_notes({{ manga.mid }});">保存</a>
+                        <button id="editor_edit" type="button" class="btn btn-sm btn-primary" onclick="return load_editor();">编辑</button>
+                        <button id="editor_cancel" type="button" style="display: none;" class="btn btn-sm btn-secondary"
+                           onclick="return destry_editor();">取消</button>
+                        <button id="editor_save" type="button" class="btn btn-sm btn-primary" style="display: none;"
+                           onclick="return save_notes({{ manga.mid }});">保存</button>
                         </span>
                         {% endif %}
                     </span>

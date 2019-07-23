@@ -67,12 +67,23 @@ def delete_resource(res, uid):
     from services.user_services import get_user_by_uid
     from os import path, remove
     # check user privilege
-    if res.uploader_uid != uid and get_user_by_uid(uid).privilege.operate_file is False:
+    if res.uploader_uid != uid and get_user_by_uid(uid).privilege.operate_file is not True:
         return 1
     filepath = path.abspath(RESOURCE_FOLDER + res.resource_path + "/" + res.resource_name)
     remove(filepath)
     db.session.delete(res)
     db.session.commit()
+    return 0
+
+
+def new_dir(uid, filepath, dir_name):
+    from services.user_services import get_user_by_uid
+    from os import path, makedirs
+    # check user privilege
+    if get_user_by_uid(uid).privilege.operate_file is not True:
+        return 1
+    if not path.exists(path.join(RESOURCE_FOLDER, filepath, dir_name)):
+        makedirs(path.join(RESOURCE_FOLDER, filepath, dir_name))
     return 0
 
 
@@ -135,4 +146,10 @@ def change_resource_accessibility(res, uid, new_accessibility):
     if user.privilege.operate_file is not True:
         return 1
     res.public_access = new_accessibility
+    db.session.commit()
+
+
+def change_resource_uploader(res, uid):
+    from models import db
+    res.uploader_uid = uid
     db.session.commit()

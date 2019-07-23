@@ -1,27 +1,35 @@
 def accept_quest(agent_uid, accept_uid, qid):
-    from models.user import User
-    from models.quest import Quest
+    from services.content_manager import update_quest
+    from services.resource_manager import get_all_resources_under_path, change_resource_uploader
+    from services.user_services import get_user_by_uid, update_user
     from models import db
     agent_uid = str(agent_uid)
     # check agent privilege
     if agent_uid != accept_uid:
-        if not User.query.get(agent_uid).privilege.operate_quest:
+        if not get_user_by_uid(agent_uid).privilege.operate_quest:
             return 2
     # check user privilege
-    if not User.query.get(accept_uid).privilege.accept_quest:
+    if not get_user_by_uid(accept_uid).privilege.accept_quest:
         return 1
-    quest = Quest.query.get(qid)
+    quest = get_quest_by_qid(qid)
     # check quest availability
     if quest.status != "HIRING":
         return 3
     # TODO: solve simultaneous problem
     quest.accept_uid = accept_uid
     quest.accept_on = db.func.now()
-    quest.last_update = db.func.now()
+    update_quest(quest)
     quest.status = "WORKING"
     db.session.commit()
-    User.query.get(accept_uid).last_active = db.func.now()
-    db.session.commit()
+    update_user(accept_uid)
+    # assign uploader to resources if exist
+    if quest.resource is not None:
+        resources = get_all_resources_under_path("quest/" + str(qid))
+        for resource in resources:
+            try:
+                change_resource_uploader(resource, accept_uid)
+            except:
+                pass
     return 0
 
 
@@ -125,7 +133,7 @@ def reopen_quest(uid, qid):
 def transfer_quest(uid, qid):
     from models import db
     from services.user_services import get_user_by_uid
-    from services.resource_manager import delete_resource
+    from services.resource_manager import delete_resource, change_resource_uploader, get_all_resources_under_path
     # check user privilege
     quest = get_quest_by_qid(qid)
     user = get_user_by_uid(uid)
@@ -135,10 +143,17 @@ def transfer_quest(uid, qid):
     quest.status = "HIRING"
     quest.accept_uid = None
     res = quest.resource
-    quest.resource_rid = None
+    # quest.resource_rid = None
     db.session.commit()
     if res is not None:
-        delete_resource(res, res.uploader_uid)
+        # delete_resource(res, res.uploader_uid)
+        # change the owner of all files under the quest folder to nobody
+        resources = get_all_resources_under_path("quest/" + str(qid))
+        for resource in resources:
+            try:
+                change_resource_uploader(resource, None)
+            except:
+                pass
     return 0
 
 

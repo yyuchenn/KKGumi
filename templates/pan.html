@@ -51,7 +51,37 @@
                 <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#uploader"
                         onclick="return render_uploader('{{ cur }}')">上传文件
                 </button>
-                <button type="button" class="btn btn-primary">创建文件夹</button>
+                {% if user and user.privilege.operate_file %}
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new_dir">创建文件夹
+                    </button>
+                    <!-- Modal-新建文件夹 -->
+                    <div class="modal fade" id="new_dir" tabindex="-1" role="dialog"
+                         aria-labelledby="dirModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="dirModalLabel">新建文件夹</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <form>
+                                    <div class="modal-body">
+                                        <input type="text" name="new_dir" class="form-control" value=""
+                                               placeholder="文件夹名">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                                        <button type="button" class="btn btn-primary"
+                                                onclick="return new_folder('{{ cur }}', new_dir);">
+                                            新建
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             <div class="collapse" id="uploader">
                 <div class="card-body">
                     <form class="dropzone" id="dropzone">
@@ -61,7 +91,7 @@
             </p>
         </section>
 
-        <ul class="list-group mb-3">
+        <ul id="pan_display" class="list-group mb-3">
             {% for folder in folders %}
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                     <div>
@@ -77,7 +107,7 @@
             {% endfor %}
 
             {% for res in files_res %}
-                <li class="list-group-item d-flex justify-content-between lh-condensed">
+                <li class="list-group-item d-flex justify-content-between lh-condensed" >
                     <div>
                         <a class="my-0 h6" href="{{ join('/resource',res.resource_path,res.resource_name) }}">
                             {{ res.resource_name }}</a><br>
@@ -87,12 +117,15 @@
                         <div class="text-muted" id="create_on{{ res.rid }}">
                             <script>setLocalTime_exact("create_on{{ res.rid }}", {{ res.create_on.timestamp() }});</script>
                         </div>
-                        <small class="text-muted">
-                            <button type="button" data-toggle="modal"
-                                    data-target="#delete{{ res.rid }}" class="btn-group-sm btn-danger">删除
-                            </button>
-                        </small>
+                        {% if user and (res.uploader == user or user.privilege.operate_file) %}
+                            <small class="text-muted">
+                                <button type="button" data-toggle="modal" id="res{{ res.rid }}"
+                                        data-target="#delete{{ res.rid }}" class="btn-sm btn-danger">删除
+                                </button>
+                            </small>
+                        {% endif %}
                     </div>
+                    {% if user and (res.uploader == user or user.privilege.operate_file) %}
                         <div class="modal fade" id="delete{{ res.rid }}" tabindex="-1" role="dialog"
                              aria-labelledby="deleteModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -109,15 +142,14 @@
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
                                         <button type="button" class="btn btn-danger"
-                                                onclick="return delete_file('{{ join('/resource',res.resource_path,res.resource_name) }}');">
+                                                onclick="return delete_file('{{ join('/resource',res.resource_path,res.resource_name) }}', {{ res.rid }});">
                                             删除
                                         </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>
