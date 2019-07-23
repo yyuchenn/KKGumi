@@ -9,20 +9,14 @@ function load_editor(qid) {
                 UploadFiles(files, insertImg, qid);
             },
             onMediaDelete: function (target) {
+            },
+            onInit: function () {
+                unchange();
+            },
+            onChange: function () {
+                change();
             }
         }
-    });
-    $(document).ready(function () {
-        fetch("/resource/quest/" + qid + "/article.html").then(function (response) {
-            if (response.status === 404)
-                return "";
-            if (response.status === 403)
-                return "您暂无权限浏览。";
-            return response.text();
-        }).then(function (r) {
-            console.log(r);
-            $('#summernote').summernote("code", r);
-        });
     });
 }
 
@@ -73,6 +67,7 @@ function update_article(qid) {
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
+                saved();
                 console.log("success");
                 break;
             case 1:

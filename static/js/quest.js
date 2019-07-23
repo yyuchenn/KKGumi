@@ -1,4 +1,8 @@
-function finish_quest(qid) {
+function finish_quest(qid, force=false) {
+    if (!force && isChanged) {
+        $("#unsave_finish_confirm").modal("show");
+        return false;
+    }
     var postData = new FormData();
     postData.append("qid", qid);
     fetch("/guild/finish_quest", {
@@ -16,7 +20,11 @@ function finish_quest(qid) {
     return false;
 }
 
-function transfer_quest(qid) {
+function transfer_quest(qid, force=false) {
+    if (!force && isChanged) {
+        $("#unsave_transfer_confirm").modal("show");
+        return false;
+    }
     var postData = new FormData();
     postData.append("qid", qid);
     fetch("/guild/transfer_quest", {
@@ -34,7 +42,11 @@ function transfer_quest(qid) {
     return false;
 }
 
-function close_quest(qid) {
+function close_quest(qid, force=false) {
+    if (!force && isChanged) {
+        $("#unsave_closed_confirm").modal("show");
+        return false;
+    }
     var postData = new FormData();
     postData.append("qid", qid);
     fetch("/guild/close_quest", {
