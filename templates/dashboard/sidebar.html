@@ -1,56 +1,96 @@
 {% extends 'navbar.html' %}
 {% block title %}{{ user.nickname }} - 九九组{% endblock %}
 {% block head %}
+    <style>
+        h1 {
+            color: #6c757d;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+
+            .jumbotron {
+                padding-top: 6rem;
+                padding-bottom: 6rem;
+            }
+        }
+
+        .jumbotron {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            margin-bottom: 0;
+            background-color: #fff;
+        }
+
+        .jumbotron p:last-child {
+            margin-bottom: 0;
+        }
+
+        .jumbotron-heading {
+            font-weight: 300;
+        }
+
+        .jumbotron .container {
+            max-width: 40rem;
+        }
+
+    </style>
     <link href="/static/css/dashboard.css" rel="stylesheet">
     <script src="/static/js/dashboard.js"></script>
     {% block main_head %}{% endblock %}
 {% endblock %}
 {% block body %}
-    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-        <div class="sidebar-sticky">
-            <ul class="nav flex-column">
+    <div class="content">
+        <div id="container" class="row">
+            <div class="col-md-10 order-md-2 mb-4">
+                {% block main %}{% endblock %}
+            </div>
+            <div class="col-md-2 order-md-1">
+                <nav class="col-md-2 d-md-block bg-light" style="position: fixed">
+                    <div class="sidebar-sticky">
+                        <ul class="nav flex-column">
 
-                <li class="nav-item">
-                <li class="nav-item">
-                    <a class="nav-link nickname {% block dash %}{% endblock %}" href="/dashboard">
-                        {{ user.nickname }}
-                    </a>
+                            <li class="nav-item">
+                            <li class="nav-item">
+                                <a class="nav-link nickname {% block dash %}{% endblock %}" href="/dashboard">
+                                    {{ user.nickname }}
+                                </a>
 
-                </li>
-                {% if user.privilege.accept_quest %}
-                    <li class="nav-item">
-                        <a class="nav-link {% block quest %}{% endblock %}" href="/dashboard/quest">
-                            任务
-                        </a>
-                    </li>
-                {% endif %}
-                {% if user.privilege.operate_manga %}
-                    <li class="nav-item">
-                        <a class="nav-link {% block icode %}{% endblock %}" href="/dashboard/icode">
-                            邀请码
-                        </a>
-                    </ul>
-                {% endif %}
+                            </li>
+                            {% if user.privilege.accept_quest %}
+                                <li class="nav-item">
+                                    <a class="nav-link {% block quest %}{% endblock %}" href="/dashboard/quest">
+                                        任务
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if user.privilege.operate_manga %}
+                                <li class="nav-item">
+                                    <a class="nav-link {% block icode %}{% endblock %}" href="/dashboard/icode">
+                                        邀请码
+                                    </a>
+                                </ul>
+                            {% endif %}
 
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-                <span>账户</span>
-            </h6>
-            <ul class="nav flex-column mb-2">
-                <li class="nav-item">
-                    <a class="nav-link {% block profile %}{% endblock %}" href="/dashboard/profile">
-                        修改资料
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout">
-                        退出登录
-                    </a>
-                </li>
-            </ul>
+                        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                            <span>账户</span>
+                        </h6>
+                        <ul class="nav flex-column mb-2">
+                            <li class="nav-item">
+                                <a class="nav-link {% block profile %}{% endblock %}" href="/dashboard/profile">
+                                    修改资料
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">
+                                    退出登录
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+
         </div>
-    </nav>
-
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-        {% block main %}{% endblock %}
-    </main>
+    </div>
 {% endblock %}

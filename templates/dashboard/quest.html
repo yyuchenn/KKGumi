@@ -6,41 +6,55 @@
 {% block quest %}active{% endblock %}
 {% block main %}
     <div class="container">
-        <h1 style="text-align: center">任务</h1>
-        <div class="on_going">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-muted">进行中的任务</span>
-            </h4>
-            <ul class="list-group mb-3">
-                {% for quest in get_quests(uid=user.uid, status="WORKING") %}
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <div>
-                            <a class="my-0 h6" href="/quest/{{ quest.qid }}">
-                                {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
-                            <small class="text-muted"></small>
-                        </div>
-                        <span class="text-muted" id="qid{{ quest.qid }}"
-                              style="font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', monospace"><script>setTimer("qid{{ quest.qid }}", {{ quest.accept_on.timestamp() }})</script></span>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
+        <section class="jumbotron text-center">
+            <p class="container">
+            <h1 class="jumbotron-heading">我的任务</h1>
+            <p class="lead text-muted">
+            </p>
+        </section>
 
-        <div class="finished">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-muted">已完成的任务</span>
-            </h4>
-            <ul class="list-group mb-3">
-                {% for quest in get_quests(uid=user.uid, status="FINISHED") %}
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <div>
-                            <a class="my-0 h6" href="/quest/{{ quest.qid }}">
-                                {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
-                            <small class="text-muted"></small>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
+        <ul class="nav nav-tabs" id="indexTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="working-tab" data-toggle="tab" href="#working" role="tab"
+                   aria-controls="working"
+                   aria-selected="true">进行中<span
+                        class="badge badge-primary badge-pill">{{ count_iter(get_quests(uid=user.uid, status="WORKING")) }}</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="finished-tab" data-toggle="tab" href="#finished" role="tab"
+                   aria-controls="finished" aria-selected="false">已完成<span
+                        class="badge badge-success badge-pill">{{ count_iter(get_quests(uid=user.uid, status="FINISHED")) }}</span></a>
+            </li>
+        </ul>
+        <div class="tab-content" id="tabs">
+            <div class="tab-pane fade show active" id="working" role="tabpanel" aria-labelledby="working-tab">
+                <ul class="list-group mb-3">
+                    {% for quest in get_quests(uid=user.uid, status="WORKING") %}
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <a class="my-0 h6" href="/quest/{{ quest.qid }}">
+                                    {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
+                                <small class="text-muted"></small>
+                            </div>
+                            <span class="text-muted" id="qid{{ quest.qid }}"
+                                  style="font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', monospace"><script>setTimer("qid{{ quest.qid }}", {{ quest.accept_on.timestamp() }})</script></span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="tab-pane fade" id="finished" role="tabpanel" aria-labelledby="finished-tab">
+                <ul class="list-group mb-3">
+                    {% for quest in get_quests(uid=user.uid, status="FINISHED") %}
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <a class="my-0 h6" href="/quest/{{ quest.qid }}">
+                                    {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
+                                <small class="text-muted"></small>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
 {% endblock %}

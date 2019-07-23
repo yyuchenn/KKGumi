@@ -51,59 +51,111 @@
                 {% if user and user.privilege.accept_quest %}
                     <a href="/dashboard/quest" class="btn btn-primary my-2">我的任务</a>
                     <div id="success-pop" class="alert alert-danger alert-dismissible fade show" role="alert">
-                        咕咕提醒：您已经咕了<b id="goo"><script>setTimer("goo", {{ user.last_active.timestamp() }})</script></b>啦！
+                        咕咕提醒：您已经咕了<b id="goo">
+                        <script>setTimer("goo", {{ user.last_active.timestamp() }})</script>
+                    </b>啦！
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                 {% endif %}
             </p>
-
-
         </section>
-        {% if user and user.privilege.accept_quest %}
-            <div class="col-md-12 mb-4">
-                <h4 class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="text-muted">征集中</span>
-                    <span class="badge badge-danger badge-pill">{{ statistics.count_on_quests_in_mangas(mangas, 'HIRING') }}</span>
-                </h4>
+        <ul class="nav nav-tabs" id="indexTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="working-tab" data-toggle="tab" href="#working" role="tab"
+                   aria-controls="working"
+                   aria-selected="true">进行中<span
+                        class="badge badge-primary badge-pill">{{ statistics.count_on_quests_in_mangas(mangas, 'WORKING') }}</span></a>
+            </li>
 
+            {% if user and user.privilege.accept_quest %}
+                <li class="nav-item">
+                    <a class="nav-link" id="hiring-tab" data-toggle="tab" href="#hiring" role="tab"
+                       aria-controls="hiring" aria-selected="false">征集中<span
+                            class="badge badge-danger badge-pill">{{ statistics.count_on_quests_in_mangas(mangas, 'HIRING') }}</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="closed-tab" data-toggle="tab" href="#closed" role="tab"
+                       aria-controls="closed" aria-selected="false">已终止<span
+                            class="badge badge-warning badge-pill">{{ statistics.count_on_quests_in_mangas(mangas, 'CLOSED') }}</span></a>
+                </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" id="finished-tab" data-toggle="tab" href="#finished" role="tab"
+                   aria-controls="finished" aria-selected="false">已完成<span
+                        class="badge badge-success badge-pill">{{ statistics.count_on_quests_in_mangas(mangas, 'FINISHED') }}</span></a>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="tabs">
+            <div class="tab-pane fade show active" id="working" role="tabpanel" aria-labelledby="working-tab">
                 <ul class="list-group mb-3">
-                    {% for quest in get_quests(status="HIRING") %}
+                    {% for quest in get_quests(status="WORKING") %}
                         <li class="list-group-item d-flex justify-content-between lh-condensed">
                             <div>
                                 <a class="my-0 h6" href="/quest/{{ quest.qid }}">
                                     {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
-                                <small class="text-muted"><span id="qid{{ quest.qid }}"><script>setLocalTime("qid{{ quest.qid }}", {{ quest.create_on.timestamp() }})</script></small>
+                                <small class="text-muted">担当: <a
+                                        href="/member/{{ quest.accept_uid }}">{{ quest.accept_by.nickname }}</a></small>
                             </div>
-                            <div>
-                                <span class="text-muted"><button role="button" class="btn-primary" onclick="return accept_quest({{ user.uid }}, {{ quest.qid }});">承接</button></span>
-                            </div>
+                            <span class="text-muted" id="qid{{ quest.qid }}"
+                                  style="font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', monospace"><script>setTimer("qid{{ quest.qid }}", {{ quest.accept_on.timestamp() }})</script></span>
                         </li>
                     {% endfor %}
                 </ul>
             </div>
-        {% endif %}
-        <div class="col-md-12 mb-4">
-            <h4 class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-muted">进行中</span>
-                <span class="badge badge-primary badge-pill">{{ statistics.count_on_quests_in_mangas(mangas, 'WORKING') }}</span>
-            </h4>
-            <ul class="list-group mb-3">
-                {% for quest in get_quests(status="WORKING") %}
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <div>
-                            <a class="my-0 h6" href="/quest/{{ quest.qid }}">
-                                {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
-                            <small class="text-muted">担当: <a
-                                    href="/member/{{ quest.accept_uid }}">{{ quest.accept_by.nickname }}</a></small>
-                        </div>
-                        <span class="text-muted" id="qid{{ quest.qid }}"
-                              style="font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', monospace"><script>setTimer("qid{{ quest.qid }}", {{ quest.accept_on.timestamp() }})</script></span>
-                    </li>
-                {% endfor %}
-            </ul>
+            {% if user and user.privilege.accept_quest %}
+                <div class="tab-pane fade" id="hiring" role="tabpanel" aria-labelledby="hiring-tab">
+                    <ul class="list-group mb-3">
+                        {% for quest in get_quests(status="HIRING") %}
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <a class="my-0 h6" href="/quest/{{ quest.qid }}">
+                                        {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
+                                    <small class="text-muted"></small>
+                                </div>
+                                <div>
+                                <span class="text-muted"><button role="button" class="btn-primary"
+                                                                 onclick="return accept_quest({{ user.uid }}, {{ quest.qid }});">承接</button></span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="tab-pane fade" id="closed" role="tabpanel" aria-labelledby="closed-tab">
+                    <ul class="list-group mb-3">
+                        {% for quest in get_quests(status="CLOSED") %}
+                            <li class="list-group-item d-flex justify-content-between lh-condensed">
+                                <div>
+                                    <a class="my-0 h6" href="/quest/{{ quest.qid }}">
+                                        {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
+                                    <small class="text-muted"></small>
+                                </div>
+                                <div>
+                                    <span class="text-muted"></span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="tab-pane fade" id="finished" role="tabpanel" aria-labelledby="finished-tab">
+                <ul class="list-group mb-3">
+                    {% for quest in get_quests(status="FINISHED") %}
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <a class="my-0 h6" href="/quest/{{ quest.qid }}">
+                                    {{ quest.chapter.manga.manga_name }}{{ quest.chapter.chapter_name }}{{ quest.quest_name }}</a><br>
+                                <small class="text-muted">担当: <a
+                                        href="/member/{{ quest.accept_uid }}">{{ quest.accept_by.nickname }}</a></small>
+                            </div>
+                            <span class="text-muted" id="qid{{ quest.qid }}"
+                                  style="font-family: 'Consolas', 'Monaco', 'Bitstream Vera Sans Mono', monospace"><script>setLocalTime_exact("qid{{ quest.qid }}", {{ quest.complete_on.timestamp() }})</script></span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-
     </div>
 {% endblock %}

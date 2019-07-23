@@ -37,7 +37,8 @@ def profile():
 def quest():
     from services.user_services import get_user_by_uid
     from services.content_manager import get_quests
-    return render_template('dashboard/quest.html', user=get_user_by_uid(session['uid']), get_quests=get_quests)
+    from services.statistics import count_iter
+    return render_template('dashboard/quest.html', user=get_user_by_uid(session['uid']), get_quests=get_quests, count_iter=count_iter)
 
 
 @dashboard_bp.route('/content')

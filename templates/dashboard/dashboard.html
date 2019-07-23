@@ -1,7 +1,13 @@
 {% extends 'dashboard/sidebar.html' %}
 {% block title %}{{ user.nickname }} - 九九组{% endblock %}
-{% block main_head %}{% endblock %}
+{% block main_head %}
+{% endblock %}
 {% block dash %}active{% endblock %}
 {% block main %}
-    <h1 style="text-align: center">欢迎回来，{{ user.nickname }}</h1>
+    <section class="jumbotron text-center">
+        <p class="container">
+        <h1 class="jumbotron-heading">欢迎回来，{{ user.nickname }}</h1>
+        <p class="lead text-muted">
+        </p>
+    </section>
 {% endblock %}

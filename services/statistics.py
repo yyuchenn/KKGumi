@@ -36,3 +36,10 @@ def count_on_chapters_in_mangas(mangas, status):
     for manga in mangas:
         count += count_on_chapters(manga, status)
     return count
+
+
+def count_iter(iterable):
+    count = 0
+    for i in iterable:
+        count += 1
+    return count
