@@ -1,8 +1,8 @@
 {% extends 'quest/quest_template.html' %}
 {% block quest_head %}
-    <link href="/static/summernote/summernote-bs4.css" rel="stylesheet">
-    <script src="/static/summernote/summernote-bs4.js"></script>
-    <script src="/static/summernote/summernote-zh-CN.min.js"></script>
+    <link href="/static/css/summernote-bs4.css" rel="stylesheet">
+    <script src="/static/js/summernote-bs4.js"></script>
+    <script src="/static/js/summernote-zh-CN.min.js"></script>
     <script>
         $(document).ready(function () {
             fetch("/resource/quest/{{ quest.qid }}/article.html").then(function (response) {
@@ -17,6 +17,7 @@
             });
         });
     </script>
+    <link href="/static/css/font_loader.css" rel="stylesheet">
 {% endblock %}
 {% block quest_body %}
     <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -24,19 +25,23 @@
         <span>
         {% if user and user.privilege.operate_quest and (quest.status == "FINISHED" or quest.status == "CLOSED") %}
             <span class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="accessibility" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="accessibility"
+                        data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                 公开情况
             </button>
             <div class="dropdown-menu" aria-labelledby="accessibility">
-                <a class="dropdown-item {% if quest.public_access == True %}active{% endif %}" href="#" onclick="return change_quest_accessibility({{ quest.qid }}, 1);">游客可见</a>
-                <a class="dropdown-item {% if quest.public_access == False%}active{% endif %}" href="#" onclick="return change_quest_accessibility({{ quest.qid }}, 0);">游客不可见</a>
+                <a class="dropdown-item {% if quest.public_access == True %}active{% endif %}" href="#"
+                   onclick="return change_quest_accessibility({{ quest.qid }}, 1);">游客可见</a>
+                <a class="dropdown-item {% if quest.public_access == False %}active{% endif %}" href="#"
+                   onclick="return change_quest_accessibility({{ quest.qid }}, 0);">游客不可见</a>
                 </div>
             </span>
         {% endif %}
             {% if user and quest.accept_by == user and quest.status == "WORKING" %}
                 <span id="saveSuccessTag" class="btn btn-success" style="display: none;">保存成功</span>
-                <button id="saveButton" type="button" class="btn btn-secondary" onclick="return update_article({{ quest.qid }})">保存
+                <button id="saveButton" type="button" class="btn btn-secondary"
+                        onclick="return update_article({{ quest.qid }})">保存
             </button>{% endif %}
         </span>
     </h4>

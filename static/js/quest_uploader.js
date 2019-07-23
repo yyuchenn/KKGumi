@@ -2,8 +2,19 @@ function load_editor(qid) {
     $('#summernote').summernote({
         lang: 'zh-CN',
         airMode: false,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture']],
+            ['view', ['fullscreen', 'codeview', 'help']],
+        ],
         placeholder: '点按这里开始键入内容',
-        fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New'],
+        fontNames: ['方正新书宋', '方正兰亭刊黑', 'Courier New'],
+        fontNamesIgnoreCheck: ['方正新书宋', '方正兰亭刊黑'],
         callbacks: {
             onImageUpload: function (files, editor, $editable) {
                 UploadFiles(files, insertImg, qid);

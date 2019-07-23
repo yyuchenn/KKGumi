@@ -114,7 +114,7 @@
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                不保存就提交的话，这次做的所有修改就都没了哦。继续吗？
+                                                不保存就提交的话，这次的修改就都丢了哦。要继续吗？
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
@@ -180,7 +180,26 @@
                                 <button type="button" class="btn btn-secondary"
                                         onclick="return transfer_quest({{ quest.qid }});">另请高明
                                 </button>
-                                <div class="modal fade" id="unsave_transfer_confirm" tabindex="-1" role="dialog"
+
+                                <button type="button" class="btn btn-warning"
+                                        onclick="return close_quest({{ quest.qid }});">关闭任务
+                                </button>
+
+                            {% endif %}
+                            {% if quest.status == "FINISHED" %}
+                                <button type="button" class="btn btn-warning"
+                                        onclick="return reopen_quest({{ quest.qid }});">再开任务
+                                </button>
+                            {% endif %}
+                            {% if quest.status == "CLOSED" %}
+                                <button type="button" class="btn btn-warning"
+                                        onclick="return reopen_quest({{ quest.qid }});">再开任务
+                                </button>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    {% if quest.status == "WORKING" %}
+                        <div class="modal fade" id="unsave_transfer_confirm" tabindex="-1" role="dialog"
                                      aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
@@ -206,10 +225,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-warning"
-                                        onclick="return close_quest({{ quest.qid }});">关闭任务
-                                </button>
-                                <div class="modal fade" id="unsave_closed_confirm" tabindex="-1" role="dialog"
+                        <div class="modal fade" id="unsave_closed_confirm" tabindex="-1" role="dialog"
                                      aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
@@ -234,19 +250,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            {% endif %}
-                            {% if quest.status == "FINISHED" %}
-                                <button type="button" class="btn btn-warning"
-                                        onclick="return reopen_quest({{ quest.qid }});">再开任务
-                                </button>
-                            {% endif %}
-                            {% if quest.status == "CLOSED" %}
-                                <button type="button" class="btn btn-warning"
-                                        onclick="return reopen_quest({{ quest.qid }});">再开任务
-                                </button>
-                            {% endif %}
-                        {% endif %}
-                    </div>
+                    {% endif %}
                 {% endif %}
                 <div class="metadata">
                     <h4 class="text-muted">Metadata</h4>
