@@ -16,17 +16,52 @@
         }
 
     </style>
+    <script src="/static/js/time_util.js"></script>
 {% endblock %}
 {% block body %}
-    <span class="content">
-        <div class="content">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">首页</a></li>
+            <li class="breadcrumb-item"><a href="/manga">漫画</a></li>
+            <li class="breadcrumb-item"><a href="/manga/{{ chapter.manga.mid }}">{{ chapter.manga.manga_name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ chapter.chapter_name }}</li>
+        </ol>
+    </nav>
+    <div class="content">
         <div id="container" class="row">
             <div class="col-lg-12">
-                <h1>{{ manga.manga_name }}</h1>
-                <h2>{{ chapter.chapter_name }}</h2>
+                <span class="h1">{{ manga.manga_name }}{{ chapter.chapter_name }}</span>
             </div>
         </div>
+        <div id="container" class="row">
+            <div class="col-md-9 order-md-2 mb-4">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-muted">STAFF</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    {% for quest in chapter.quests %}
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <div>
+                                <a class="my-0 h6" href="/quest/{{ quest.qid }}">
+                                    {{ quest.quest_name }}</a><br>
+                            </div>
+                            <div>
+                                <span>{{ quest.accept_by.nickname }}</span>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-3 order-md-1">
+                <h4 class="text-muted">Metadata</h4>
+                <div class="text-body">
+                    <b>创建时间: </b><span id="create_date"><script>setLocalTime("create_date", {{ chapter.create_on.timestamp() }})</script></span>
+                </div>
+                <div class="text-body">
+                    <b>最后一次更新于</b><span id="update_date"><script>setLocalTime_exact("update_date", {{ chapter.last_update.timestamp() }})</script></span>
+                </div>
+            </div>
 
+        </div>
     </div>
-    </span>
 {% endblock %}

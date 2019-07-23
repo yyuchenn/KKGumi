@@ -28,6 +28,15 @@
     {% block quest_head %}{% endblock %}
 {% endblock %}
 {% block body %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">首页</a></li>
+            <li class="breadcrumb-item"><a href="/manga">漫画</a></li>
+            <li class="breadcrumb-item"><a href="/manga/{{ quest.chapter.manga.mid }}">{{ quest.chapter.manga.manga_name }}</a></li>
+            <li class="breadcrumb-item"><a href="/chapter/{{ quest.chapter.cid }}">{{ quest.chapter.chapter_name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ quest.quest_name }}</li>
+        </ol>
+    </nav>
     <div class="content">
         <div id="container" class="row">
             <div class="col-lg-12">
@@ -75,15 +84,15 @@
                                             </div>
                                             <form>
                                                 <div class="modal-body">
-                                                        <label for="assign_to">将这个任务分配给：</label>
-                                                        <select class="form-control" name="assign_to"
-                                                                type="text"
-                                                                id="inputAccessibility"
-                                                                required="required" autofocus="">
-                                                            {% for member in get_users() %}
+                                                    <label for="assign_to">将这个任务分配给：</label>
+                                                    <select class="form-control" name="assign_to"
+                                                            type="text"
+                                                            id="inputAccessibility"
+                                                            required="required" autofocus="">
+                                                        {% for member in get_users() %}
                                                             <option value="{{ member.uid }}">{{ member.nickname }}@{{ member.username }}</option>
-                                                            {% endfor %}
-                                                        </select>
+                                                        {% endfor %}
+                                                    </select>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <button type="button" class="btn btn-secondary"

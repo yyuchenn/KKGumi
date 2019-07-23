@@ -28,6 +28,12 @@
     </style>
 {% endblock %}
 {% block body %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">首页</a></li>
+            <li class="breadcrumb-item active" aria-current="page">成员</li>
+        </ol>
+    </nav>
     <div class="container">
         <section class="jumbotron text-center">
             <p class="container">
@@ -48,7 +54,8 @@
                     </div>
                     <div align="right">
                         <div class="text-muted">{{ member.privilege.privilege_name }}</div>
-                        <small class="text-muted">{% if member.introduction %}{{ member.introduction }}{% endif %}</small>
+                        <small class="text-muted">
+                            {% if member.introduction %}{{ member.introduction }}{% endif %}</small>
                     </div>
                 </li>
             {% endfor %}
