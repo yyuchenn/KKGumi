@@ -14,4 +14,5 @@ class Resource(db.Model):
     uploader = db.relationship("User", backref="upload_file", foreign_keys="Resource.uploader_uid")
 
     def __repr__(self):
-        return '<Resource %r>' % self.rid
+        from os.path import join
+        return join("/resource/", self.resource_path, self.resource_name)

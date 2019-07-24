@@ -1,29 +1,23 @@
 function create_manga(title, cover) {
     title = title.value;
     cover = cover.files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(cover);
-    reader.onloadend = function () {
-        var c = this.result;
-        var postData = new FormData();
-        postData.append("title", title);
-        postData.append("cover", c);
-        fetch("/admin/add_manga", {
-            method: "POST",
-            body: postData
-        }).then(response => response.json()).then(function (j) {
-            //console.log(j.toString());
-            switch (j["code"]) {
-                case 0:
-                    window.location.reload();
-                    break;
-                case 1:
-                    document.getElementsByClassName("errorMessage").setAttribute("style", "color: #bd2130");
-                    document.getElementsByClassName("errorMessage").innerHTML = "上传失败";
-                    return false;
-            }
-        });
-    };
+    postData = new FormData();
+    postData.append("title", title);
+    postData.append("cover", cover);
+    fetch("/admin/add_manga", {
+        method: "POST",
+        body: postData
+    }).then(response => response.json()).then(function (j) {
+        switch (j["code"]) {
+            case 0:
+                window.location.reload();
+                break;
+            case 1:
+                document.getElementsByClassName("errorMessage").setAttribute("style", "color: #bd2130");
+                document.getElementsByClassName("errorMessage").innerHTML = "上传失败";
+                return false;
+        }
+    });
     return false;
 }
 
@@ -37,7 +31,6 @@ function create_chapter(title, mid) {
         method: "POST",
         body: postData
     }).then(response => response.json()).then(function (j) {
-        //console.log(j.toString());
         switch (j["code"]) {
             case 0:
                 window.location.reload();
@@ -110,29 +103,24 @@ function change_manga_title(new_title, mid) {
 
 function change_manga_cover(cover, mid) {
     cover = cover.files[0];
-    var reader = new FileReader();
-    reader.readAsDataURL(cover);
-    reader.onloadend = function () {
-        var c = this.result;
-        var postData = new FormData();
-        postData.append("new_cover", c);
-        postData.append("mid", mid);
-        fetch("/admin/change_manga_cover", {
-            method: "POST",
-            body: postData
-        }).then(response => response.json()).then(function (j) {
-            //console.log(j.toString());
-            switch (j["code"]) {
-                case 0:
-                    window.location.reload();
-                    break;
-                case 1:
-                    document.getElementsByClassName("errorMessage").setAttribute("style", "color: #bd2130");
-                    document.getElementsByClassName("errorMessage").innerHTML = "上传失败";
-                    return false;
-            }
-        });
-    };
+    postData = new FormData();
+    postData.append("new_cover", cover);
+    postData.append("mid", mid);
+    fetch("/admin/change_manga_cover", {
+        method: "POST",
+        body: postData
+    }).then(response => response.json()).then(function (j) {
+        //console.log(j.toString());
+        switch (j["code"]) {
+            case 0:
+                window.location.reload();
+                break;
+            case 1:
+                document.getElementsByClassName("errorMessage").setAttribute("style", "color: #bd2130");
+                document.getElementsByClassName("errorMessage").innerHTML = "上传失败";
+                return false;
+        }
+    });
     return false;
 }
 

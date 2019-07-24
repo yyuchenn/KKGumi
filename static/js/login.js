@@ -17,11 +17,25 @@ function login(user, pwd) {
                             window.location.href = "/dashboard";
                         } break;
                     case 1:
-                        document.getElementById("errorMessage").setAttribute("style", "color: #bd2130");
-                        document.getElementById("errorMessage").innerHTML = "用户名或密码不正确。";
+                        $("#errorMessage").html("用户名或密码不正确");
+                        $("#errorArea").hide();
+                        $("#errorMessage").show();
+                        setTimeout(function () {
+                            $("#errorArea").show();
+                            $("#errorMessage").hide();
+                        }, 1500);
                         return false;
                     case 2:
                         document.getElementById("errorMessage").setAttribute("style", "color: #bd2130");
+                        return false;
+                    case 500:
+                        $("#errorMessage").html("用户名或密码不合法");
+                        $("#errorArea").hide();
+                        $("#errorMessage").show();
+                        setTimeout(function () {
+                            $("#errorArea").show();
+                            $("#errorMessage").hide();
+                        }, 1500);
                         return false;
                 }
             });

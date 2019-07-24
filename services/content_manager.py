@@ -1,16 +1,21 @@
-def create_manga(uid, name, cover=None):
+def create_manga(uid, name, cover):
     from models import db
-    from models.user import User
+    from services.user_services import get_user_by_uid
+    from services.resource_manager import upload_resource, compress_image
     from models.manga import Manga
-    import base64
+    from os.path import join
     # check user privilege
-    user = User.query.get(uid)
+    user = get_user_by_uid(uid)
     if not user.privilege.operate_manga:
         return 1
     # create manga
-    new_manga = Manga(manga_name=name, manga_cover=cover)
+    new_manga = Manga(manga_name=name)
     db.session.add(new_manga)
     db.session.commit()
+    resource = upload_resource(cover, uid, '.sys/manga/'+str(new_manga.mid), True, filename='cover')
+    new_manga.manga_cover_rid = resource.rid
+    db.session.commit()
+    compress_image(join(resource.resource_path, resource.resource_name))
     update_manga(new_manga)
     return 0
 
@@ -62,9 +67,9 @@ def create_quest(uid, name, quest_type, public_accessibility, cid):
 
 def manga_title(uid, new_title, mid):
     from models import db
-    from models.user import User
+    from services.user_services import get_user_by_uid
     # check user privilege
-    user = User.query.get(uid)
+    user = get_user_by_uid(uid)
     if not user.privilege.operate_quest:
         return 1
     # check manga existence
@@ -80,27 +85,35 @@ def manga_title(uid, new_title, mid):
 
 def manga_cover(uid, new_cover, mid):
     from models import db
-    from models.user import User
+    from services.user_services import get_user_by_uid
+    from services.resource_manager import upload_resource, delete_resource, compress_image
+    from os.path import join
     # check user privilege
-    user = User.query.get(uid)
+    user = get_user_by_uid(uid)
     if not user.privilege.operate_quest:
         return 1
     # check manga existence
     manga = get_manga_by_mid(mid)
     if manga is None:
         return 2
-    # change title
-    manga.manga_cover = new_cover
+    # change cover
+    old_cover = manga.manga_cover
+    manga.manga_cover_rid = None
     db.session.commit()
+    delete_resource(old_cover, uid)
+    resource = upload_resource(new_cover, uid, '.sys/manga/' + str(manga.mid), True, filename='cover')
+    manga.manga_cover_rid = resource.rid
+    db.session.commit()
+    compress_image(join(resource.resource_path, resource.resource_name))
     update_manga(manga)
     return 0
 
 
 def manga_status(uid, new_status, mid):
     from models import db
-    from models.user import User
+    from services.user_services import get_user_by_uid
     # check user privilege
-    user = User.query.get(uid)
+    user = get_user_by_uid(uid)
     if not user.privilege.operate_quest:
         return 1
     # check manga existence

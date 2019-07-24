@@ -1,7 +1,7 @@
 from conf import RESOURCE_FOLDER
 
 
-def upload_resource(file, uid, filepath, public_access):
+def upload_resource(file, uid, filepath, public_access, filename=None, file_ext=None):
     from models.resource import Resource
     from services.user_services import get_user_by_uid
     from models import db
@@ -14,7 +14,13 @@ def upload_resource(file, uid, filepath, public_access):
         return None
     if not path.exists(RESOURCE_FOLDER + filepath):
         makedirs(RESOURCE_FOLDER + filepath)
-    filename = file.filename
+    if filename is None:
+        filename = file.filename
+    else:
+        if file_ext is None:
+            filename = filename + path.splitext(file.filename)[1]
+        else:
+            filename = filename + '.' + file_ext
     # filename clash resolve
     if path.exists(path.join(RESOURCE_FOLDER + filepath, file.filename)):
         ext = '.' + filename.split('.')[-1]
@@ -115,7 +121,8 @@ def retrieve_info(filepath):
 
 
 def get_resource_url(res):
-    return "/resource/" + res.resource_path + "/" + res.resource_name
+    from os.path import join
+    return join("/resource/", res.resource_path, res.resource_name)
 
 
 def get_resource_by_uri(url):
@@ -153,3 +160,27 @@ def change_resource_uploader(res, uid):
     from models import db
     res.uploader_uid = uid
     db.session.commit()
+
+
+def compress_image(infile_path, outfile_path=None, max_size=150, step=10, quality=80):
+    from PIL import Image
+    import os
+    from conf import RESOURCE_FOLDER
+    infile_path = os.path.abspath(os.path.join(RESOURCE_FOLDER, infile_path))
+    sub = False
+    if outfile_path is not None:
+        outfile_path = os.path.abspath(os.path.join(RESOURCE_FOLDER, outfile_path))
+    else:
+        outfile_path = infile_path
+        sub = True
+    o_size = os.path.getsize(infile_path) / 1024
+    if o_size <= max_size:
+        return infile_path
+    im = Image.open(infile_path)
+    while o_size > max_size:
+        im.save(outfile_path, quality=quality)
+        if quality - step < 0:
+            break
+        quality -= step
+        o_size = os.path.getsize(outfile_path) / 1024
+    return 0

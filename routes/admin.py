@@ -10,7 +10,7 @@ admin_bp = Blueprint('admin', __name__, static_folder='../static', template_fold
 def add_manga():
     from services.content_manager import create_manga
     title = request.form["title"]
-    cover = request.form["cover"]
+    cover = request.files["cover"]
     try:
         code = create_manga(session.get('uid'), title, cover)
     except Exception:
@@ -71,7 +71,7 @@ def change_manga_title():
 @is_login
 def change_manga_cover():
     from services.content_manager import manga_cover
-    cover = request.form["new_cover"]
+    cover = request.files["new_cover"]
     mid = request.form['mid']
     try:
         code = manga_cover(session.get('uid'), cover, mid)

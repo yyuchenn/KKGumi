@@ -23,8 +23,8 @@
         }
     </style>
     <link href="/static/css/login.css" rel="stylesheet">
-
     <script src="/static/js/signup.js"></script>
+    <script src="/static/js/jquery-3.4.1.min.js"></script>
 </head>
 <body class="text-center" data-gr-c-s-loaded="true">
 <form class="form-signin">
@@ -35,9 +35,8 @@
     <label for="inputPassword" class="sr-only">密码</label>
     <input name="pwd" type="password" id="inputPassword" class="form-control" placeholder="密码" required="">
     <input name="pwd2" type="password" id="inputPassword2" class="form-control" placeholder="再次输入密码" required="">
-
-    <div style="color: #bd2130; visibility: hidden" id="errorMessage"> 网站错误，请刷新后重试。
-    </div>
+    <div class="btn btn-danger" style="visibility: hidden;" id="errorArea"> 。</div>
+    <div class="btn btn-danger" style="display: none" id="errorMessage"> 网站错误，请刷新后重试。</div>
     <button class="btn btn-lg btn-primary btn-block" type="submit" onclick="return signup(user,pwd, pwd2);">注册</button>
 </form>
 

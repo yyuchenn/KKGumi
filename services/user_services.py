@@ -25,7 +25,7 @@ def signup_service(username, password, i_code=None):
     :param i_code: invitation code
     :param username: username of what the user input
     :param password: password of what the user input
-    :return: 0 for success. 1 for bad invitation. 2 for occupied username.
+    :return: 0 for success. 1 for bad invitation. 2 for occupied username. 3 for no public registration
     '''
     from models import db
     from models.user import User
@@ -36,7 +36,9 @@ def signup_service(username, password, i_code=None):
     # check i_code
     invitation = None
     if i_code is None:
-        pid = 3
+        # if open public registration, uncomment the following line
+        # pid = 3
+        return 3
     else:
         from models.invitation import Invitation
         invitation = Invitation.query.filter_by(i_code=i_code).first()

@@ -24,7 +24,7 @@ def accept_quest(agent_uid, accept_uid, qid):
     update_user(accept_uid)
     # assign uploader to resources if exist
     if quest.resource is not None:
-        resources = get_all_resources_under_path("quest/" + str(qid))
+        resources = get_all_resources_under_path(".sys/quest/" + str(qid))
         for resource in resources:
             try:
                 change_resource_uploader(resource, accept_uid)
@@ -75,7 +75,7 @@ def register_article(uid, quest, filename):
     from services.resource_manager import create_resource
     from models import db
     public_access = quest.public_access
-    rid = create_resource(filename, uid, "quest/" + str(quest.qid), public_access).rid
+    rid = create_resource(filename, uid, ".sys/quest/" + str(quest.qid), public_access).rid
     quest.resource_rid = rid
     db.session.commit()
 
@@ -86,7 +86,7 @@ def register_content(uid, quest, files):
     public_access = quest.public_access
     urls = {}
     for filetag in files:
-        resource = upload_resource(files[filetag], uid, "quest/" + str(quest.qid), public_access)
+        resource = upload_resource(files[filetag], uid, ".sys/quest/" + str(quest.qid), public_access)
         db.session.commit()
         urls[filetag] = get_resource_url(resource)
     return urls
@@ -148,7 +148,7 @@ def transfer_quest(uid, qid):
     if res is not None:
         # delete_resource(res, res.uploader_uid)
         # change the owner of all files under the quest folder to nobody
-        resources = get_all_resources_under_path("quest/" + str(qid))
+        resources = get_all_resources_under_path(".sys/quest/" + str(qid))
         for resource in resources:
             try:
                 change_resource_uploader(resource, None)
@@ -170,7 +170,7 @@ def change_quest_accessibility(uid, qid, new_accessibility):
     if quest.status != "FINISHED" and quest.status != "CLOSED":
         return 2
     # change resources accessibility
-    resources = get_all_resources_under_path('quest/' + qid)
+    resources = get_all_resources_under_path('.sys/quest/' + qid)
     for res in resources:
         change_resource_accessibility(res, uid, new_accessibility)
     # change quest accessibility
@@ -190,7 +190,7 @@ def delete_quest(uid, qid):
         return 1
     # delete all resources under the quest file
     try:
-        resources = get_all_resources_under_path("quest/" + qid)
+        resources = get_all_resources_under_path(".sys/quest/" + qid)
         for res in resources:
             delete_resource(res, uid)
     except:

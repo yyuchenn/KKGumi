@@ -2,12 +2,36 @@
 {% block title %}关于 - 九九组{% endblock %}
 {% block head %}
     <style>
-        .content {
+        h1 {
+            color: #6c757d;
             text-align: center;
         }
 
-        h1 {
-            color: #6c757d;
+        @media (min-width: 768px) {
+
+            .jumbotron {
+                padding-top: 6rem;
+                padding-bottom: 6rem;
+            }
+        }
+
+        .jumbotron {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            margin-bottom: 0;
+            background-color: #fff;
+        }
+
+        .jumbotron p:last-child {
+            margin-bottom: 0;
+        }
+
+        .jumbotron-heading {
+            font-weight: 300;
+        }
+
+        .jumbotron .container {
+            max-width: 40rem;
         }
     </style>
 {% endblock %}
@@ -18,8 +42,14 @@
             <li class="breadcrumb-item active" aria-current="page">关于</li>
         </ol>
     </nav>
-    <span class="content">
-<h1>关于本组</h1>
-<div>咕~咕~咕~咕~咕~咕~咕~咕~</div>
-    </span>
+    <div class="container">
+        <section class="jumbotron text-center">
+            <p class="container">
+            <h1 class="jumbotron-heading">关于</h1>
+
+            <p class="lead text-muted">
+                这个页面咕了(组长说弄结果一直没弄)<br />反正想加入我们的话欢迎加QQ群826788824。
+            </p>
+        </section>
+    </div>
 {% endblock %}
