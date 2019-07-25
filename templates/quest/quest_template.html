@@ -60,7 +60,7 @@
     <script src="/static/js/time_util.js"></script>
     <script src="/static/js/quest.js"></script>
 
-    {% if user and user.privilege.operate_quest and quest.status == "HIRING" %}
+    {% if user and (user.privilege.operate_quest or (user.privilege.accept_quest and quest.status == "HIRING")) %}
         <script src="/static/js/guild.js"></script>
     {% endif %}
     {% block quest_head %}{% endblock %}
