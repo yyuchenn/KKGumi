@@ -7,7 +7,8 @@ function finish_quest(qid, force=false) {
     postData.append("qid", qid);
     fetch("/guild/finish_quest", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -29,7 +30,8 @@ function transfer_quest(qid, force=false) {
     postData.append("qid", qid);
     fetch("/guild/transfer_quest", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -51,7 +53,8 @@ function close_quest(qid, force=false) {
     postData.append("qid", qid);
     fetch("/guild/close_quest", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -69,7 +72,8 @@ function reopen_quest(qid) {
     postData.append("qid", qid);
     fetch("/guild/reopen_quest", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -89,7 +93,8 @@ function change_quest_accessibility(qid, new_accessibility) {
     postData.append("new_accessibility", new_accessibility);
     fetch("/admin/change_quest_accessibility", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -111,7 +116,8 @@ function delete_quest(qid, mid) {
     postData.append("qid", qid);
     fetch("/admin/delete_quest", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -132,7 +138,8 @@ function assign_quest(assign_to, qid) {
     postData.append("qid", qid);
     fetch("/guild/accept_quest", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:

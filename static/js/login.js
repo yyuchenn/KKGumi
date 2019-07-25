@@ -6,7 +6,8 @@ function login(user, pwd) {
             postData.append("pwd", pwd);
             fetch(window.location.search,{
                 method: "POST",
-                body: postData
+                body: postData,
+                credentials: "same-origin"
             }).then(response => response.json()).then(function (j){
                 //console.log(j.toString());
                 switch (j["code"]) {

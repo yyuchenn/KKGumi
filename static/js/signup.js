@@ -17,7 +17,8 @@ function signup(user, pwd, pwd2) {
             postData.append("pwd", pwd);
             fetch(window.location.search,{
                 method: "POST",
-                body: postData
+                body: postData,
+                credentials: "same-origin"
             }).then(response => response.json()).then(function (j){
                 switch (j["code"]) {
                     case 0:

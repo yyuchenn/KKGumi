@@ -9,7 +9,8 @@ function change_nickname(new_nickname) {
     postData.append("new_nickname", new_nickname);
     fetch('/dashboard/change_nickname', {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -30,7 +31,8 @@ function change_introduction(new_introduction) {
     postData.append("new_introduction", new_introduction);
     fetch('/dashboard/change_introduction', {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -57,7 +59,8 @@ function change_password(old_password, new_password, new_password_repeat) {
     postData.append("new_password", new_password);
     fetch('/dashboard/change_password', {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:

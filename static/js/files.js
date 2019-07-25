@@ -23,7 +23,8 @@ function delete_file(uri, rid) {
     postData.append('uri', uri);
     fetch("/delete_file", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         //console.log(j.toString());
         switch (j["code"]) {
@@ -49,7 +50,8 @@ function new_folder(folder, dir_name) {
     postData.append('dir_name', dir_name);
     fetch("/new_dir", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:

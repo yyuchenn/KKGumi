@@ -6,7 +6,8 @@ function create_manga(title, cover) {
     postData.append("cover", cover);
     fetch("/admin/add_manga", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -29,7 +30,8 @@ function create_chapter(title, mid) {
     postData.append("mid", mid);
     fetch("/admin/add_chapter", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -60,7 +62,8 @@ function create_quest(name, type, accessibility, cid) {
     postData.append("cid", cid);
     fetch("/admin/add_quest", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -87,7 +90,8 @@ function change_manga_title(new_title, mid) {
     postData.append("mid", mid);
     fetch("/admin/change_manga_title", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -108,7 +112,8 @@ function change_manga_cover(cover, mid) {
     postData.append("mid", mid);
     fetch("/admin/change_manga_cover", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         //console.log(j.toString());
         switch (j["code"]) {
@@ -131,7 +136,8 @@ function change_manga_status(new_title, mid) {
     postData.append("mid", mid);
     fetch("/admin/change_manga_status", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -153,7 +159,8 @@ function chapter_mark(cid, mark) {
     postData.append("mark", mark);
     fetch('/admin/chapter_mark', {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -196,7 +203,8 @@ function save_notes(mid) {
     postData.append("mid", mid);
     fetch("/guild/change_notes", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -219,7 +227,8 @@ function delete_chapter(cid) {
     postData.append("cid", cid);
     fetch("/admin/delete_chapter", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -240,7 +249,8 @@ function delete_manga(mid) {
     postData.append("mid", mid);
     fetch("/admin/delete_manga", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:

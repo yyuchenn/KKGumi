@@ -54,6 +54,7 @@ function UploadFiles(files, func, qid) {
     fetch("/guild/upload_file", {
         method: "POST",
         body: formData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:
@@ -74,7 +75,8 @@ function update_article(qid) {
     postData.append("article", article);
     fetch("/guild/update_article", {
         method: "POST",
-        body: postData
+        body: postData,
+        credentials: "same-origin"
     }).then(response => response.json()).then(function (j) {
         switch (j["code"]) {
             case 0:

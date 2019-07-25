@@ -4,7 +4,8 @@ function accept_quest(accept_uid, qid) {
     postData.append("qid", qid);
     fetch("/guild/accept_quest",{
                 method: "POST",
-                body: postData
+                body: postData,
+                credentials: "same-origin"
             }).then(response => response.json()).then(function (j){
                 switch (j["code"]) {
                     case 0:
