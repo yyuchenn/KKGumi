@@ -2,36 +2,32 @@
 {% block title %}关于 - 九九组{% endblock %}
 {% block head %}
     <style>
-        h1 {
-            color: #6c757d;
-            text-align: center;
+		.mask{
+            position: relative;
+            //width:658px;
+            //height:1024px;
+            overflow: hidden;
         }
-
-        @media (min-width: 768px) {
-
-            .jumbotron {
-                padding-top: 6rem;
-                padding-bottom: 6rem;
-            }
+        .mask:after{
+            white-space: pre;
+            content:  attr(data-title)"\000A""咕咕咕 ""\000A""天下第一咕咕咕 汉化工房九九组""\000A""Copyright 2019 汉化工房九九组 All Right Saved 版权所有 侵权必究";
+            position: absolute;
+            width:100%;
+            top:100%;
+            left:0;
+            padding: 12em 0;
+            text-align: right;
+            font-size: 20px;
+            color: #fff;
+            background-color: rgba(52,47,41,.5);
+            -webkit-transition:all .3s ease-in-out;
+            transition:all .4s ease-in-out;
+            opacity: 0;
         }
-
-        .jumbotron {
-            padding-top: 1rem;
-            padding-bottom: 1rem;
-            margin-bottom: 0;
-            background-color: #fff;
-        }
-
-        .jumbotron p:last-child {
-            margin-bottom: 0;
-        }
-
-        .jumbotron-heading {
-            font-weight: 300;
-        }
-
-        .jumbotron .container {
-            max-width: 40rem;
+        .mask:hover:after{
+            opacity: 1;
+            -webkit-transform:translate(0,-100%);
+            transform:translate(0,-100%);
         }
     </style>
 {% endblock %}
@@ -42,14 +38,9 @@
             <li class="breadcrumb-item active" aria-current="page">关于</li>
         </ol>
     </nav>
-    <div class="container">
-        <section class="jumbotron text-center">
-            <p class="container">
-            <h1 class="jumbotron-heading">关于</h1>
-
-            <p class="lead text-muted">
-                这个页面咕了(组长说弄结果一直没弄)<br />反正想加入我们的话欢迎加QQ群826788824。
-            </p>
-        </section>
+	<div class="mask" data-title="汉化工房 九九组">
+				<!--<p style="{overflow: hidden;}">汉化工房 九九组</p>-->
+		<img width="658px" height="1024px" src="/static/about.jpg"/>
+		<p style="{overflow: hidden;text-align: right;}">Copyright 2019 汉化工房九九组 All Right Saved 版权所有 侵权必究</p>
     </div>
 {% endblock %}

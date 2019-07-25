@@ -39,12 +39,13 @@ def create_chapter(uid, name, mid):
     db.session.commit()
     update_chapter(new_chapter)
     # create two default quests
-    quest1_code = create_quest(uid, "翻译", "ARTICLE", False, new_chapter.cid)
-    quest2_code = create_quest(uid, "嵌字", "ARTICLE", False, new_chapter.cid)
+    quest1_code = create_quest(uid, "翻译", "TRANSLATION", False, new_chapter.cid)
+    quest2_code = create_quest(uid, "校对", "PROOFREADING", False, new_chapter.cid, isClosed=True)
+    quest3_code = create_quest(uid, "嵌字", "TYPESETTING", False, new_chapter.cid, isClosed=True)
     return 0
 
 
-def create_quest(uid, name, quest_type, public_accessibility, cid):
+def create_quest(uid, name, quest_type, public_accessibility, cid, isClosed=False):
     from models import db
     from models.user import User
     from models.chapter import Chapter
@@ -59,6 +60,8 @@ def create_quest(uid, name, quest_type, public_accessibility, cid):
         return 2
     # create quest
     new_quest = Quest(quest_name=name, quest_type=quest_type, cid=cid, create_uid=uid, public_access=public_accessibility)
+    if isClosed:
+        new_quest.status = "CLOSED"
     db.session.add(new_quest)
     db.session.commit()
     update_quest(new_quest)
@@ -191,11 +194,11 @@ def update_quest(quest):
     update_chapter(quest.chapter)
 
 
-def chapter_mark(uid, cid, mark):
+def chapter_mark(uid, cid, mark, force=False):
     from services.user_services import get_user_by_uid
     from models import db
     # check user privilege
-    if get_user_by_uid(uid).privilege.operate_chapter is not True:
+    if force is not True and get_user_by_uid(uid).privilege.operate_chapter is not True:
         return 1
     chapter, useless = get_chapter_by_cid(cid)
     if chapter.status == "FINISHED" and mark == "WORKING":

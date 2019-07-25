@@ -43,6 +43,50 @@ def finish_quest(uid, qid):
     quest.complete_on = db.func.now()
     quest.status = "FINISHED"
     db.session.commit()
+    # chain opener
+    quests = quest.chapter.quests
+    if quest.quest_type == "TRANSLATION" or quest.quest_type == "PROOFREADING":
+        if quest.quest_type == "TRANSLATION":
+            unfinished_translation = []
+            proofreading = []
+            typesetting = []
+            for q in quests:
+                if q.quest_type == "TRANSLATION" and (q.status == "WORKING" or q.status == "HIRING"):
+                    unfinished_translation.append(q)
+                elif q.quest_type == "PROOFREADING":
+                    proofreading.append(q)
+                elif q.quest_type == "TYPESETTING":
+                    typesetting.append(q)
+            if len(unfinished_translation) == 0:
+                if len(proofreading) > 0:
+                    for q in proofreading:
+                        if q.status == "CLOSED":
+                            reopen_quest(uid, q.qid, force=True)
+                else:
+                    for q in typesetting:
+                        if q.status == "CLOSED":
+                            reopen_quest(uid, q.qid, force=True)
+        if quest.quest_type == "PROOFREADING":
+            unfinished_translation = []
+            unfinished_proofreading = []
+            typesetting = []
+            for q in quests:
+                if q.quest_type == "TRANSLATION" and (q.status == "WORKING" or q.status == "HIRING"):
+                    unfinished_translation.append(q)
+                elif q.quest_type == "PROOFREADING" and (q.status == "WORKING" or q.status == "HIRING"):
+                    unfinished_proofreading.append(q)
+                elif q.quest_type == "TYPESETTING":
+                    typesetting.append(q)
+            if len(unfinished_translation) == 0 and len(unfinished_proofreading) == 0:
+                for q in typesetting:
+                    if q.status == "CLOSED":
+                        reopen_quest(uid, q.qid, force=True)
+    # auto finishing chapter
+    for q in quests:
+        if q.status != "FINISHED":
+            return 0
+    from services.content_manager import chapter_mark
+    chapter_mark(uid, quest.chapter.cid, "FINISHED", force=True)
     return 0
 
 
@@ -112,15 +156,15 @@ def close_quest(uid, qid):
     return 0
 
 
-def reopen_quest(uid, qid):
+def reopen_quest(uid, qid, force=False):
     from models import db
     from services.user_services import get_user_by_uid
     # check user privilege
     quest = get_quest_by_qid(qid)
     user = get_user_by_uid(uid)
-    if not user.privilege.operate_quest:
+    if force is not True and not user.privilege.operate_quest:
         return 1
-    # mark it close
+    # mark it open
     quest.complete_on = db.func.now()
     if quest.accept_uid is not None:
         quest.status = "WORKING"
