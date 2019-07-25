@@ -19,7 +19,7 @@ def is_login(func):
 
 @user_bp.route('/login', methods=['POST', 'GET'])
 def login():
-    callback = parse_qs(request.query_string).get(b'callback')
+    callback = parse_qs(request.query_string.decode('utf8')).get(b'callback')
     if callback is None:
         callback = '/dashboard'  # default callback url
     else:
