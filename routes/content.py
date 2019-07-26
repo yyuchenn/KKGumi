@@ -38,4 +38,6 @@ def quest_check(qid):
         abort(404)
     from services.user_services import get_user_by_uid
     from services.user_services import get_users
+    if quest.quest_type == "PROOFREADING":
+        return render_template('quest/proofreading.html', user=get_user_by_uid(session.get('uid')), quest=quest, get_users=get_users)
     return render_template('quest/article.html', user=get_user_by_uid(session.get('uid')), quest=quest, get_users=get_users)

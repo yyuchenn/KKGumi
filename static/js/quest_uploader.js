@@ -1,4 +1,4 @@
-function load_editor(qid) {
+function load_editor(qid, proof_mode=false) {
     $('#summernote').summernote({
         lang: 'zh-CN',
         airMode: false,
@@ -24,7 +24,11 @@ function load_editor(qid) {
             onInit: function () {
                 unchange();
             },
-            onChange: function () {
+            onChange: proof_mode? function () {
+                change();
+                article = $('#summernote').summernote("code");
+                $("#comparing_area").html(htmldiff(original, article));
+            }: function () {
                 change();
             }
         }

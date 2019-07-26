@@ -177,6 +177,11 @@
                                 </button>
                             {% endif %}
                             {% if quest.status == "WORKING" %}
+                                {% if quest.accept_by != user %}
+                                    <button type="button" class="btn btn-primary"
+                                        onclick="return finish_quest({{ quest.qid }}, true);">完成任务
+                                    </button>
+                                {% endif %}
                                 <button type="button" class="btn btn-secondary"
                                         onclick="return transfer_quest({{ quest.qid }});">另请高明
                                 </button>
@@ -184,7 +189,6 @@
                                 <button type="button" class="btn btn-warning"
                                         onclick="return close_quest({{ quest.qid }});">关闭任务
                                 </button>
-
                             {% endif %}
                             {% if quest.status == "FINISHED" %}
                                 <button type="button" class="btn btn-warning"

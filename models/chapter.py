@@ -11,7 +11,7 @@ class Chapter(db.Model):
     last_update = db.Column(db.TIMESTAMP, default=db.func.now())
     status = db.Column(db.String(32), default="WORKING")  # ["WORKING", "HALT", "FINISHED"]
 
-    manga = db.relationship("Manga", backref=db.backref("chapters", order_by=last_update.desc()), foreign_keys="Chapter.aff_mid")
+    manga = db.relationship("Manga", backref=db.backref("chapters", order_by=create_on), foreign_keys="Chapter.aff_mid")
     release_file = db.relationship("Resource", foreign_keys="Chapter.release_rid")
 
     def __repr__(self):

@@ -57,12 +57,18 @@ def create_resource(filename, uid, filepath, public_access):
     return new_resource
 
 
+def copy_resource(res_target, res_source):
+    from os.path import join
+    open(get_resource_filepath(res_target), "wb").write(open(get_resource_filepath(res_source), "rb").read())
+    return 0
+
+
 def update_resource(res, content, uid):
     from os import path
     # check user privilege
     if res.uploader_uid != uid:
         return False
-    file = open(path.join(RESOURCE_FOLDER + res.resource_path, res.resource_name), "w")
+    file = open(get_resource_filepath(res), "w")
     file.write(content)
     file.close()
     return True
@@ -75,7 +81,7 @@ def delete_resource(res, uid):
     # check user privilege
     if res.uploader_uid != uid and get_user_by_uid(uid).privilege.operate_file is not True:
         return 1
-    filepath = path.abspath(RESOURCE_FOLDER + res.resource_path + "/" + res.resource_name)
+    filepath = get_resource_filepath(res)
     remove(filepath)
     db.session.delete(res)
     db.session.commit()
@@ -160,6 +166,11 @@ def change_resource_uploader(res, uid):
     from models import db
     res.uploader_uid = uid
     db.session.commit()
+
+
+def get_resource_filepath(res):
+    from os import path
+    return path.abspath(path.join(RESOURCE_FOLDER + res.resource_path, res.resource_name))
 
 
 def compress_image(infile_path, outfile_path=None, max_size=150, step=10, quality=80):

@@ -50,6 +50,23 @@ def guild_upload_file():
     return JSONEncoder().encode(response)
 
 
+@guild_bp.route('/fetch_original', methods=['POST'])
+@is_login
+def fetch_original():
+    from services.quest_manager import fetch_original
+    uid = session.get('uid')
+    qid = request.form.get('my_qid')
+    target_qid = request.form.get('target_qid')
+    to_article = request.form.get('to_article')
+    if to_article == 'true':
+        to_article = True
+    else:
+        to_article = False
+    code = fetch_original(uid, qid, target_qid, to_article)
+    response = {'code': code}
+    return JSONEncoder().encode(response)
+
+
 @guild_bp.route('/close_quest', methods=['POST'])
 @is_login
 def close_quest():

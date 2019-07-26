@@ -34,10 +34,11 @@ def accept_quest(agent_uid, accept_uid, qid):
 
 
 def finish_quest(uid, qid):
+    from services.user_services import get_user_by_uid
     from models import db
     # check user privilege
     quest = get_quest_by_qid(qid)
-    if quest.accept_uid != uid:
+    if quest.accept_uid != uid and not get_user_by_uid(uid).privilege.operate_quest:
         return 1
     # mark it finish
     quest.complete_on = db.func.now()
@@ -134,6 +135,42 @@ def register_content(uid, quest, files):
         db.session.commit()
         urls[filetag] = get_resource_url(resource)
     return urls
+
+
+def fetch_original(uid, qid, source_qid, to_article):
+    from models.quest import Quest
+    from services.resource_manager import copy_resource, get_resource_by_uri, create_resource
+    from os.path import join
+    from models import db
+    print(uid, qid, source_qid, type(to_article))
+    quest = Quest.query.get(qid)
+    source_quest = Quest.query.get(source_qid)
+    # check quest status
+    if quest.status != "WORKING":
+        return 1
+    # check user privilege
+    if quest.accept_uid != uid:
+        return 2
+    # check target resource existence
+    if source_quest.resource is None:
+        return 3
+    # fetch original
+    # source_article_uri = join("/resource/.sys/quest/", str(source_qid), "article.html")
+    target_original_uri = join("/resource/.sys/quest/", str(qid), "original.html")
+    target_article_uri = join("/resource/.sys/quest/", str(qid), "article.html")
+    res_source = source_quest.resource
+    res_original = get_resource_by_uri(target_original_uri)
+    if res_original is None:
+        res_original = create_resource("original.html", uid, join(".sys/quest", str(qid)), False)
+    res_target = get_resource_by_uri(target_article_uri)
+    if res_target is None:
+        res_target = create_resource("article.html", uid, join(".sys/quest", str(qid)), False)
+        quest.resource_rid = res_target.rid
+        db.session.commit()
+    copy_resource(res_original, res_source)
+    if to_article:
+        copy_resource(res_target, res_source)
+    return 0
 
 
 def get_quest_by_qid(qid):

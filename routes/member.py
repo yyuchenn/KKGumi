@@ -7,7 +7,9 @@ member_bp = Blueprint('member', __name__, static_folder='../static', template_fo
 @member_bp.route('/member')
 def members():
     from services.user_services import get_user_by_uid, get_users
-    return render_template('members.html', user=get_user_by_uid(session.get('uid')), get_users=get_users)
+    from services.statistics import count_iter
+    from services.content_manager import get_quests
+    return render_template('members.html', user=get_user_by_uid(session.get('uid')), get_users=get_users, get_quests=get_quests, count_iter=count_iter)
 
 
 @member_bp.route('/member/<uid>')

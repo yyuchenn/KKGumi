@@ -13,6 +13,7 @@
                 return response.text();
             }).then(function (r) {
                 $("#summernote").html(r);
+                unchange();
                 load_editor({{ quest.qid }});
             });
         });

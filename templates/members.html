@@ -50,7 +50,7 @@
                     <div>
                         <a class="my-0 h6" href="/member/{{ member.uid }}">
                             {{ member.nickname }}</a><br>
-                        <small class="text-muted">@{{ member.username }}</small>
+                        <small class="text-muted"><span class="badge badge-pill badge-primary">{{ count_iter(get_quests(uid=member.uid, status="WORKING")) }}</span>@{{ member.username }}</small>
                     </div>
                     <div align="right">
                         <div class="text-muted">{{ member.privilege.privilege_name }}</div>
