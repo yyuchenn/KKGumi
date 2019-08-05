@@ -32,7 +32,7 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" style="background-color: #FF9900!important;">
     <a class="navbar-brand" href="/">九九组</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
             aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +63,13 @@
                 </li>
             {% endif %}
             <li class="nav-item active">
-                <a class="nav-link nickname" href="/login">{% if user %}{{ user.nickname }}{% else %}登录{% endif %}<span
+                <a class="nav-link nickname" href="#" onclick="login_redirect();">{% if user %}{{ user.nickname }}{% else %}登录{% endif %}<span
                         class="sr-only">(current)</span></a>
+                <script>
+                    function login_redirect() {
+                        window.location.href = "/login?callback=" + window.location.pathname;
+                    }
+                </script>
 
             </li>
         </ul>
