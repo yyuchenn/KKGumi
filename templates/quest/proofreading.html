@@ -39,6 +39,24 @@
     <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-muted">校对</span>
         <span>
+        {% if user %}
+            <script src="/static/js/import_export.js"></script>
+            <script src="/static/js/FileSaver.js"></script>
+            <script src="/static/js/html-docx.js"></script>
+            <span class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="export"
+                    data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                导出
+            </button>
+            <div class="dropdown-menu" aria-labelledby="export">
+                <a class="dropdown-item" href="#"
+                   onclick="return export_word({{ quest.qid }}, filename);">导出为Word</a>
+                <a class="dropdown-item" href="#"
+                   onclick="return export_txt({{ quest.qid }}, filename);">导出为txt</a>
+            </div>
+            </span>
+        {% endif %}
         {% if user and user.privilege.operate_quest and (quest.status == "FINISHED" or quest.status == "CLOSED") %}
             <span class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="accessibility"

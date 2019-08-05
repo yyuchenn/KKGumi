@@ -34,7 +34,7 @@ def accept_quest(agent_uid, accept_uid, qid):
 
 
 def finish_quest(uid, qid):
-    from services.user_services import get_user_by_uid
+    from services.user_services import get_user_by_uid, update_user
     from models import db
     # check user privilege
     quest = get_quest_by_qid(qid)
@@ -44,6 +44,7 @@ def finish_quest(uid, qid):
     quest.complete_on = db.func.now()
     quest.status = "FINISHED"
     db.session.commit()
+    update_user(uid)
     # chain opener
     quests = quest.chapter.quests
     if quest.quest_type == "TRANSLATION" or quest.quest_type == "PROOFREADING":

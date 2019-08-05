@@ -24,8 +24,26 @@
     <h4 class="d-flex justify-content-between align-items-center mb-3">
         <span class="text-muted">稿件</span>
         <span>
-        {% if user and user.privilege.operate_quest and (quest.status == "FINISHED" or quest.status == "CLOSED") %}
+        {% if user %}
+            <script src="/static/js/import_export.js"></script>
+            <script src="/static/js/FileSaver.js"></script>
+            <script src="/static/js/html-docx.js"></script>
             <span class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" type="button" id="export"
+                    data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                导出
+            </button>
+            <div class="dropdown-menu" aria-labelledby="export">
+                <a class="dropdown-item" href="#"
+                   onclick="return export_word({{ quest.qid }}, filename);">导出为Word</a>
+                <a class="dropdown-item" href="#"
+                   onclick="return export_txt({{ quest.qid }}, filename);">导出为txt</a>
+            </div>
+            </span>
+        {% endif %}
+            {% if user and user.privilege.operate_quest and (quest.status == "FINISHED" or quest.status == "CLOSED") %}
+                <span class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="accessibility"
                         data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
@@ -38,7 +56,7 @@
                    onclick="return change_quest_accessibility({{ quest.qid }}, 0);">游客不可见</a>
                 </div>
             </span>
-        {% endif %}
+            {% endif %}
             {% if user and quest.accept_by == user and quest.status == "WORKING" %}
                 <span id="saveSuccessTag" class="btn btn-success" style="display: none;">保存成功</span>
                 <button id="saveButton" type="button" class="btn btn-secondary"

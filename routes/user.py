@@ -37,6 +37,7 @@ def login():
             code = user_services.login_service(username, password)
             if code == 0:
                 session['uid'] = user_services.get_uid_by_username(username)
+                session.permanent = True
                 response['code'] = 0  # successful
             else:
                 response['code'] = code  # failed
@@ -57,7 +58,10 @@ def logout():
 @user_bp.route('/signup', methods=['POST', 'GET'])
 def signup():
     # setup callback url
-    callback = parse_qs(request.query_string).get(b'callback')
+    try:
+        callback = parse_qs(request.query_string).get(b'callback')
+    except:
+        callback = None
     if callback is None:
         callback = '/dashboard'  # default callback url
     else:
