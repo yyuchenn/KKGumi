@@ -7,7 +7,7 @@
         var original = "";
         var article = "";
         $(document).ready(function () {
-            fetch("/resource/.sys/quest/{{ quest.qid }}/article.html").then(function (response) {
+            fetch("/resource/.sys/quest/{{ quest.qid }}/article.html",{credentials: "same-origin"}).then(function (response) {
                 if (response.status === 404)
                     return "";
                 if (response.status === 403)
@@ -16,7 +16,7 @@
             }).then(function (article_html) {
                 $("#summernote").html(article_html);
                 article = article_html;
-                fetch("/resource/.sys/quest/{{ quest.qid }}/original.html").then(function (response) {
+                fetch("/resource/.sys/quest/{{ quest.qid }}/original.html",{credentials: "same-origin"}).then(function (response) {
                     if (response.status === 404)
                         return "";
                     if (response.status === 403)
