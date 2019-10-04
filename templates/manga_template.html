@@ -308,6 +308,9 @@
                     </div>
                 {% endif %}
                 <div class="text-body">
+                    <div class="summernote" style="font-size: 1.3em;font-weight: 600">{% if manga.manga_notes %}{{ manga.manga_notes|safe }}{% endif %}</div>
+                </div>
+                <div class="text-body">
                     <b>开坑时间: </b><span id="open_time"><script>setLocalTime("open_time", {{ manga.create_on.timestamp() }})</script></span>
                 </div>
                 <div class="text-body"><b>状态: </b>
@@ -333,7 +336,6 @@
                         </span>
                         {% endif %}
                     </span>
-                    <div class="summernote">{% if manga.manga_notes %}{{ manga.manga_notes|safe }}{% endif %}</div>
                 </div>
             </div>
 
